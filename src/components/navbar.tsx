@@ -17,8 +17,6 @@ import clsx from 'clsx'
 
 import { ThemeSwitch } from '@/components/theme-switch'
 
-import { Logo } from '@/components/icons'
-
 import ConnectButton from '@/components/button/connect-button'
 
 export const Navbar = () => {
@@ -27,8 +25,7 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Logo />
-            <p className="font-bold text-inherit">ACME</p>
+            <p className="font-bold text-inherit">Cicada</p>
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
