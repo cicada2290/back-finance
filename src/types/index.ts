@@ -6,11 +6,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 
 declare global {
   interface Window {
-    xrpl: {
-      crossmark: any
-      isCrossmark: boolean
-      js: any
-      xdir: any
-    }
+    xrpl: any
   }
 }
