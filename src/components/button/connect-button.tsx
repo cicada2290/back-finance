@@ -39,6 +39,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
     }
   }
 
+  /*
   const handleConnect = async (service: Wallets) => {
     setError(null)
     try {
@@ -103,6 +104,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
       }
     }
   }
+  */
 
   const handleButtonClick = () => {
     if (!accountData.address) {
@@ -118,12 +120,54 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
       : 'Connect'
   }
 
+  /*
+  useEffect(() => {
+    if (!xummWss) return
+
+    const handleOpen = () => {
+      console.log('WebSocket Client Connected')
+    }
+
+    const handleMessage = (message: any) => {
+      const data = JSON.parse(message.data)
+      console.log('message', data)
+
+      if (data.signed) {
+        fetch(`/api/wallet/xumm/payload/${data.payload_uuidv4}`)
+          .then((res) => res.json())
+          .then((json) => {
+            console.log("json", json)
+            setAccountData({
+              walletName: Wallets.Xumm,
+              address: json.data.account,
+              balance: 0,
+            })
+            xummWss.close()
+            onCloseXummLoginModal()
+          })
+      }
+    }
+
+    xummWss.onopen = handleOpen
+    xummWss.onmessage = handleMessage
+
+    return () => {
+      if (xummWss) {
+        xummWss.onopen = null
+        xummWss.onmessage = null
+        xummWss.close()
+      }
+    }
+  }, [xummWss])
+  */
+
   return (
     <>
       <Button className={className} variant="flat" onClick={handleButtonClick}>
         {renderButtonLabel()}
       </Button>
 
+      {/**
       <Modal
         isOpen={isOpen}
         onOpenChange={() => {
@@ -138,9 +182,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
             <Button onPress={() => handleConnect(Wallets.Crossmark)}>
               Crossmark
             </Button>
-            <Button onPress={() => handleConnect(Wallets.Xumm)}>
-              Xumm
-            </Button>
+            <Button onPress={() => handleConnect(Wallets.Xumm)}>Xumm</Button>
             <Button onPress={() => handleConnect(Wallets.GemWallet)}>
               Gem Wallet
             </Button>
@@ -170,12 +212,18 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
             <p className="text-3xl font-bold">{accountData.balance} XRP</p>
           </ModalBody>
           <ModalFooter>
-            <Button fullWidth variant="flat" color="danger" onPress={onDisconnect}>
+            <Button
+              fullWidth
+              variant="flat"
+              color="danger"
+              onPress={onDisconnect}
+            >
               Disconnect
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      */}
     </>
   )
 }
