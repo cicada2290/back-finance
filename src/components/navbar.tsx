@@ -17,7 +17,7 @@ import clsx from 'clsx'
 
 import { ThemeSwitch } from '@/components/theme-switch'
 
-// import ConnectButton from '@/components/button/connect-button'
+import ConnectButton from '@/components/button/connect-button'
 
 export const Navbar = () => {
   return (
@@ -54,7 +54,7 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
-          {/* <ConnectButton className="text-sm font-normal text-default-600 bg-default-100" /> */}
+          <ConnectButton className="text-sm font-normal text-default-600 bg-default-100" />
         </NavbarItem>
       </NavbarContent>
 

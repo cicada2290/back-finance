@@ -112,16 +112,14 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
     }
   }
 
-  const renderButtonLabel = () => {
-    return accountData.address
-      ? `${accountData.address.slice(0, 6)}...${accountData.address.slice(-6)}`
-      : 'Connect'
-  }
-
   return (
     <>
       <Button className={className} variant="flat" onClick={handleButtonClick}>
-        {renderButtonLabel()}
+        {accountData.address
+          ? `${accountData.address.slice(0, 6)}...${accountData.address.slice(
+              -6
+            )}`
+          : 'Connect'}
       </Button>
 
       <Modal
@@ -138,9 +136,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
             <Button onPress={() => handleConnect(Wallets.Crossmark)}>
               Crossmark
             </Button>
-            <Button onPress={() => handleConnect(Wallets.Xumm)}>
-              Xumm
-            </Button>
+            <Button onPress={() => handleConnect(Wallets.Xumm)}>Xumm</Button>
             <Button onPress={() => handleConnect(Wallets.GemWallet)}>
               Gem Wallet
             </Button>
@@ -170,7 +166,12 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
             <p className="text-3xl font-bold">{accountData.balance} XRP</p>
           </ModalBody>
           <ModalFooter>
-            <Button fullWidth variant="flat" color="danger" onPress={onDisconnect}>
+            <Button
+              fullWidth
+              variant="flat"
+              color="danger"
+              onPress={onDisconnect}
+            >
               Disconnect
             </Button>
           </ModalFooter>
