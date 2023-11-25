@@ -10,9 +10,10 @@ import {
   ModalBody,
   useDisclosure,
 } from '@nextui-org/react'
+import { Xumm } from 'xumm'
 
 import { useAccountContext } from '@/context/account-context'
-import { Wallets } from '@/config/wallets'
+import { Wallets, XUMM } from '@/config/wallets'
 
 interface ConnectButtonProps {
   className?: string
@@ -65,6 +66,10 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
             address: response.data.address,
             balance: balance,
           })
+          break
+        case Wallets.Xumm:
+          const xumm = new Xumm(XUMM.API_KEY)
+          console.log('Xumm1: ', xumm)
           break
         case Wallets.GemWallet:
           checkWalletInstallation(
@@ -132,6 +137,9 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
             <p className="text-red-500">{error}</p>
             <Button onPress={() => handleConnect(Wallets.Crossmark)}>
               Crossmark
+            </Button>
+            <Button onPress={() => handleConnect(Wallets.Xumm)}>
+              Xumm
             </Button>
             <Button onPress={() => handleConnect(Wallets.GemWallet)}>
               Gem Wallet
