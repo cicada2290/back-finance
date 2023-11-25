@@ -16,14 +16,6 @@ export const siteConfig = {
       label: 'Liquidity',
       href: '/liquidity',
     },
-    {
-      label: 'Blog',
-      href: '/blog',
-    },
-    {
-      label: 'About',
-      href: '/about',
-    },
   ],
   navMenuItems: [
     {
