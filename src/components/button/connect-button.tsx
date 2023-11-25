@@ -115,11 +115,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
   return (
     <>
       <Button className={className} variant="flat" onClick={handleButtonClick}>
-        {accountData.address
-          ? `${accountData.address.slice(0, 6)}...${accountData.address.slice(
-              -6
-            )}`
-          : 'Connect'}
+        Connect
       </Button>
 
       <Modal
