@@ -27,7 +27,9 @@ export const AccountContextProvider = ({
   children: ReactNode
 }) => {
   const [accountData, setAccountData] = useState<AccountData>({
+    walletName: null,
     address: null,
+    balance: 0,
   })
 
   const contextValue = {
