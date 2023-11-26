@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -17,15 +19,20 @@ import clsx from 'clsx'
 
 import { ThemeSwitch } from '@/components/theme-switch'
 
-import ConnectButton from '@/components/button/connect-button'
+import ConnectButton from '@/components/button/connect-button/index'
+import OpenWalletInfoModalButton from '@/components/button/open-wallet-info-modal-button'
 
-export const Navbar = () => {
+import { useAccountContext } from '@/context/account-context'
+
+const Navbar = () => {
+  const { accountData } = useAccountContext()
+
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <p className="font-bold text-inherit">Cicada</p>
+            <p className="font-bold text-inherit">{siteConfig.name}</p>
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
@@ -54,7 +61,8 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
-          <ConnectButton className="text-sm font-normal text-default-600 bg-default-100" />
+          {!accountData.isConnected && <ConnectButton />}
+          {accountData.address && <OpenWalletInfoModalButton />}
         </NavbarItem>
       </NavbarContent>
 
@@ -65,19 +73,9 @@ export const Navbar = () => {
 
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? 'primary'
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? 'danger'
-                      : 'foreground'
-                }
-                href="#"
-                size="lg"
-              >
+          {siteConfig.navMenuItems.map((item) => (
+            <NavbarMenuItem key={item.toString()}>
+              <Link color="foreground" href="/" size="lg">
                 {item.label}
               </Link>
             </NavbarMenuItem>
@@ -87,3 +85,5 @@ export const Navbar = () => {
     </NextUINavbar>
   )
 }
+
+export default Navbar

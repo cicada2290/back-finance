@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import type { AccountData } from '@/types/account'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useMemo } from 'react'
 
 interface AccountContextType {
   accountData: AccountData
@@ -27,15 +27,19 @@ export const AccountContextProvider = ({
   children: ReactNode
 }) => {
   const [accountData, setAccountData] = useState<AccountData>({
+    isConnected: false,
     walletName: null,
     address: null,
     balance: 0,
   })
 
-  const contextValue = {
-    accountData,
-    setAccountData,
-  }
+  const contextValue = useMemo(
+    () => ({
+      accountData,
+      setAccountData,
+    }),
+    [accountData, setAccountData]
+  )
 
   return (
     <AccountContext.Provider value={contextValue}>
