@@ -1,8 +1,17 @@
-# Next.js & NextUI Template
-
-This is a template for creating applications using Next.js 13 (app directory) and NextUI (v2).
+# XRPL Dapp
 
 ## Technologies Used
+
+### Blockchain
+
+- [XRP Ledger](https://xrpl.org/)
+
+### Wallet
+
+- [CROSSMARK](https://crossmark.io/)
+- [XUMM](https://xumm.app/)
+
+### Frontend
 
 - [Next.js 13](https://nextjs.org/docs/getting-started)
 - [NextUI v2](https://nextui.org/)
@@ -14,26 +23,22 @@ This is a template for creating applications using Next.js 13 (app directory) an
 
 ## How to Use
 
-### Use the template with create-next-app
+### Clone the Template from GitHub Repository
 
-To create a new project based on this template using `create-next-app`, run the following command:
+To create a new project using this template, execute the following command:
 
 ```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
+git clone git@github.com:cicada2290/xrpl-dapp.git
 ```
 
 ### Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Run the development server
 
 ```bash
-npm run dev
+pnpm dev
 ```
-
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
