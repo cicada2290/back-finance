@@ -1,5 +1,5 @@
 import '@/styles/globals.css'
-import { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/config/fonts'
 import { Navbar } from '@/components/navbar'
@@ -15,13 +15,16 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  icons: {
+    icon: '/favicon.ico',
+  },
+}
+
+export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
-  icons: {
-    icon: '/favicon.ico',
-  },
 }
 
 export default function RootLayout({
