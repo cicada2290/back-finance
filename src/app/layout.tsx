@@ -2,12 +2,12 @@ import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/config/fonts'
-import { Providers } from './providers'
 import { Navbar } from '@/components/navbar'
 import { Link } from '@nextui-org/link'
 import clsx from 'clsx'
 
 import { AccountContextProvider } from '@/context/account-context'
+import { Providers } from './providers'
 
 export const metadata: Metadata = {
   title: {
@@ -21,8 +21,6 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
   },
 }
 
