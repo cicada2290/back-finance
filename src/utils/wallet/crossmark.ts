@@ -1,23 +1,55 @@
-interface ICrossmark {}
+interface ICrossmark {
+  login(): Promise<{
+    address: string
+    meta: {
+      isError: boolean
+      isExpired: boolean
+      isFail: boolean
+      isPending: boolean
+      isRejected: boolean
+      isSigned: boolean
+      isSuccess: boolean
+    }
+    network: {
+      protocol: string
+      rpc: string
+      type: string
+      wss: string
+    }
+    publicKey: string
+    user: {
+      developer: boolean
+      id: string
+      type: string
+      username: string
+    }
+  }>
+}
 
 export default class Crossmark implements ICrossmark {
-  // constructor() {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private crossmark: any
 
-  static async login() {
-    const { response } = await window.xrpl.crossmark.signInAndWait()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(crossmark: any) {
+    this.crossmark = crossmark
+  }
+
+  async login() {
+    const { response } = await this.crossmark.signInAndWait()
     // eslint-disable-next-line no-console
     console.info('[Crossmark] response: ', response)
     return response.data
   }
 
-  static logout() {
+  logout() {
     // eslint-disable-next-line no-console
-    console.log('logout')
+    console.log('logout: ', this.crossmark)
   }
 
-  static getXrpBalance() {
+  getXrpBalance() {
     // eslint-disable-next-line no-console
-    console.log('getXrpBalance')
+    console.log('getXrpBalance: ', this.crossmark)
   }
 }
 

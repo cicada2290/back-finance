@@ -6,17 +6,26 @@ import useWallet from '@/hooks/use-wallet'
 import { useAccountContext } from '@/context/account-context'
 
 interface ConnectCrossmarkButtonProps {
+  setError: (error: string | null) => void
   onClose: () => void
 }
 
 const ConnectCrossmarkButton: React.FC<ConnectCrossmarkButtonProps> = ({
+  setError,
   onClose,
 }) => {
-  const { login } = useWallet()
+  const { isInstalled, login } = useWallet()
 
   const { setAccountData } = useAccountContext()
 
   const handleButtonClick = async () => {
+    setError(null)
+
+    if (!isInstalled(Wallets.Crossmark)) {
+      setError('Crossmark wallet is not installed')
+      return
+    }
+
     const wallet = await login(Wallets.Crossmark)
 
     setAccountData({

@@ -6,6 +6,19 @@ interface Wallet {
 }
 
 const useWallet = () => {
+  const isInstalled = (walletType: Wallets): boolean => {
+    switch (walletType) {
+      case Wallets.Crossmark:
+        if (!window.xrpl) return false
+        if (!window.xrpl.crossmark) return false
+        return true
+      case Wallets.Xumm:
+        return !!window.xrpl.xumm
+      default:
+        throw new Error('Invalid wallet type')
+    }
+  }
+
   const login = async (walletType: Wallets): Promise<Wallet> => {
     const response: Wallet = {
       address: '',
@@ -13,7 +26,7 @@ const useWallet = () => {
 
     switch (walletType) {
       case Wallets.Crossmark: {
-        const crossmark = new Crossmark()
+        const crossmark = new Crossmark(window.xrpl.crossmark)
 
         const res = await crossmark.login()
 
@@ -56,6 +69,7 @@ const useWallet = () => {
   }
 
   return {
+    isInstalled,
     login,
     logout,
     getXrpBalance,
