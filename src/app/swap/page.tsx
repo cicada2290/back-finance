@@ -1,16 +1,5 @@
-import { title } from '@/components/primitives'
 import React from 'react'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
-  Link,
-  Image,
-  Input,
-  Button,
-} from '@nextui-org/react'
+import { Divider, Input, Button } from '@nextui-org/react'
 import { SettingsIcon } from '@/components/icons'
 import { RefreshIcon } from '@/components/icons'
 import { UpDownIcon } from '@/components/icons'
