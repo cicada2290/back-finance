@@ -8,6 +8,8 @@ import {
   ModalBody,
   ModalFooter,
 } from '@nextui-org/react'
+import ConnectCrossmarkButton from '@/components/button/connect-crossmark-button'
+import ConnectXummButton from '@/components/button/connect-xumm-button'
 
 interface SelectWalletModalProps {
   isOpen: boolean
@@ -24,8 +26,8 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({
     <ModalContent>
       <ModalHeader>Connect wallet</ModalHeader>
       <ModalBody>
-        <Button>Crossmark</Button>
-        <Button>Xumm</Button>
+        <ConnectCrossmarkButton onClose={onClose} />
+        <ConnectXummButton />
       </ModalBody>
       <ModalFooter>
         <Button fullWidth variant="flat" color="danger" onPress={onClose}>

@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import { useState } from 'react'
@@ -39,7 +40,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
     }
   }
 
-  /*
   const handleConnect = async (service: Wallets) => {
     setError(null)
     try {
@@ -104,7 +104,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
       }
     }
   }
-  */
 
   const handleButtonClick = () => {
     if (!accountData.address) {
@@ -120,7 +119,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
       : 'Connect'
   }
 
-  /*
   useEffect(() => {
     if (!xummWss) return
 
@@ -159,7 +157,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
       }
     }
   }, [xummWss])
-  */
 
   return (
     <>
@@ -167,7 +164,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
         {renderButtonLabel()}
       </Button>
 
-      {/**
       <Modal
         isOpen={isOpen}
         onOpenChange={() => {
@@ -223,9 +219,9 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      */}
     </>
   )
 }
 
 export default ConnectButton
+*/
