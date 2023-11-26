@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: 'Back Finance',
+  name: 'BackFinance',
   description:
     'A decentralized financial swap platform built on the XRP Ledger.',
   navItems: [
