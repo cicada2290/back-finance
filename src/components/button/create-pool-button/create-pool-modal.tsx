@@ -11,7 +11,7 @@ import {
   ModalFooter,
 } from '@nextui-org/react'
 import SelectInput from '@/components/button/create-pool-button/select-input'
-import useAmm from '@/hooks/use-amm'
+import { useSubmitAMMCreate } from '@/hooks/useSubmitAMMCreate'
 
 const coins = [
   {
@@ -42,13 +42,13 @@ const CreatePoolModal: React.FC<CreatePoolModalProps> = ({
   const [baseAssetAmount, setBaseAssetAmount] = useState('0')
   const [quoteAssetAmount, setQuoteAssetAmount] = useState('0')
 
-  const { createAmm } = useAmm()
+  const { submit } = useSubmitAMMCreate()
 
   const handleSubmitButton = async () => {
     const asset1 = Array.from(baseAsset)[0]
     const asset2 = Array.from(quoteAsset)[0]
 
-    const response = await createAmm({
+    const response = await submit({
       asset1: {
         currency: asset1,
         value: baseAssetAmount,
@@ -57,6 +57,7 @@ const CreatePoolModal: React.FC<CreatePoolModalProps> = ({
         currency: asset2,
         value: quoteAssetAmount,
       },
+      tradingFee: 5000,
     })
 
     console.log('[handleSubmitButton]: response: ', response)
