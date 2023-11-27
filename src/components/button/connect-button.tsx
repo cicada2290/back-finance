@@ -15,6 +15,7 @@ import { Xumm } from 'xumm'
 
 import { useAccountContext } from '@/context/account-context'
 import { Wallets, XUMM } from '@/config/wallets'
+import { useWallet } from '@/hooks/useWallet'
 
 interface ConnectButtonProps {
   className?: string
@@ -30,6 +31,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
     onClose: onCloseWalletModal,
     onOpenChange: onOpenChangeWalletModal,
   } = useDisclosure()
+  const { login, logout } = useWallet()
 
   const checkWalletInstallation = (
     walletType: Wallets,
@@ -45,6 +47,9 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ className }) => {
     try {
       switch (service) {
         case Wallets.Crossmark:
+          const res = await login(Wallets.Crossmark)
+          console.log("res: ", res)
+          /*
           checkWalletInstallation(Wallets.Crossmark, window.xrpl.isCrossmark)
           const { response } = await window.xrpl.crossmark.signInAndWait()
           console.info('[Crossmark] response: ', response)

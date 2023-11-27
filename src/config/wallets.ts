@@ -1,3 +1,6 @@
+export const issuerAddress = process.env
+  .NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string
+
 export enum Wallets {
   Crossmark = 'Crossmark',
   Xumm = 'Xumm',

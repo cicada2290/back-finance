@@ -42,6 +42,7 @@
     "tailwind-variants": "^0.1.18",
     "tailwindcss": "3.3.5",
     "typescript": "5.0.4",
+    "xrpl": "^2.13.0",
     "xumm": "^1.6.5"
   },
   "devDependencies": {

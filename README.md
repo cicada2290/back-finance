@@ -21,6 +21,30 @@
 - [Framer Motion](https://www.framer.com/motion/)
 - [next-themes](https://github.com/pacocoursey/next-themes)
 
+## Wallets
+
+| Name        | Address                              |
+| :---------- | :----------------------------------- |
+| COLD WALLET | `rpjpQizArxwQcjhWmioaqjojqv634LJ4as` |
+| HOT WALLET  | `rEMej33dSAxNhTKGmdK72489HFqf55m7HK` |
+
+## Assets
+
+| Currency | Issuer                               |
+| :------- | :----------------------------------- |
+| BTC      | `rpjpQizArxwQcjhWmioaqjojqv634LJ4as` |
+| ETH      | `rpjpQizArxwQcjhWmioaqjojqv634LJ4as` |
+| BNB      | `rpjpQizArxwQcjhWmioaqjojqv634LJ4as` |
+
+## Pools
+
+- XRP/BTC
+- XRP/ETH
+- XRP/BNB
+- BTC/ETH
+- BTC/BNB
+- ETH/BNB
+
 ## How to Use
 
 ### Clone the Template from GitHub Repository
@@ -41,4 +65,21 @@ pnpm install
 
 ```bash
 pnpm dev
+```
+
+## Directory structure
+
+```bash
+src/
+ ├ app/
+ ├ components/
+ │  ├ elements/
+ │  ├ features/
+ │  └ layouts/
+ ├ config/
+ ├ context/
+ ├ hooks/
+ ├ libs/
+ ├ styles/
+ └ types/
 ```
