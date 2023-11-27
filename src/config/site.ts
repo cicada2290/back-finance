@@ -60,3 +60,8 @@ export const siteConfig = {
     sponsor: 'https://patreon.com/jrgarciadev',
   },
 }
+
+export const networks = {
+  dev: 'wss://s.devnet.rippletest.net:51233/',
+  devAmm: 'wss://amm.devnet.rippletest.net:51233/',
+}
