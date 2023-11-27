@@ -10,6 +10,8 @@ import {
   CardBody,
   CardFooter,
 } from '@nextui-org/react'
+import CreatePoolButton from '@/components/button/create-pool-button'
+import DeletePoolButton from '@/components/button/delete-pool-button'
 import useAmm from '@/hooks/use-amm'
 
 export default function PricingPage() {
@@ -20,16 +22,22 @@ export default function PricingPage() {
   useEffect(() => {
     ;(async () => {
       const response = await fetchAmmInfo()
-      console.log('response: ', response)
+      console.log('[fetchAmmInfo]: response: ', response)
       setAmmInfoList(response)
     })()
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div>
       <h1 className={title()}>Liquidity</h1>
 
-      <div className="py-10">
+      <div className="pt-10 grid grid-cols-2 gap-2">
+        <CreatePoolButton />
+        <DeletePoolButton />
+      </div>
+
+      <div className="pt-10 grid grid-cols-2 gap-4">
         {ammInfoList.map((ammInfo) => {
           return (
             <Card

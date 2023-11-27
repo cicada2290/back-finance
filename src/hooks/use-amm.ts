@@ -1,43 +1,36 @@
+import type { Amount, Balance, IssuedCurrencyAmount } from 'xrpl'
 import { ammInfoParams } from '@/config/pools'
-import { newClient } from '@/utils/xrpl'
 import { networks } from '@/config/site'
+import {
+  requestAmmInfo,
+  submitAMMCreate,
+  fetchColdWallet,
+  fetchHotWallet,
+} from '@/utils/xrpl'
 
 export interface AmmInfo {
   account: string
-  amount: {
-    currency: string
-    issuer: string
-    value: string
-  }
-  amount2: {
-    currency: string
-    issuer: string
-    value: string
-  }
-  asset_frozen: boolean
-  asset2_frozen: boolean
-  auction_slot: {
+  amount: Balance
+  amount2: Balance
+  asset_frozen?: boolean
+  asset2_frozen?: boolean
+  auction_slot?: {
     account: string
+    auth_accounts: Array<{
+      account: string
+    }>
     discounted_fee: number
-    expiration: string
-    price: {
-      currency: string
-      issuer: string
-      value: string
-    }
-    time_interval: number
   }
-  lp_token: {
-    currency: string
-    issuer: string
-    value: string
-  }
+  expiration: string
+  price: IssuedCurrencyAmount
+  time_interval: number
+  lp_token: IssuedCurrencyAmount
   trading_fee: number
-  vote_slots: {
+  vote_slots?: Array<{
     account: string
     trading_fee: number
     vote_weight: number
-  }[]
+  }>
 }
 
 const useAmm = () => {
@@ -46,26 +39,63 @@ const useAmm = () => {
    * @returns {Promise<AmmInfo[]>}
    */
   const fetchAmmInfo = async (): Promise<AmmInfo[]> => {
-    const client = newClient(networks.devAmm)
-    await client.connect()
+    const pools: AmmInfo[] = []
 
-    const pools = []
     for (const ammInfoParam of ammInfoParams) {
-      const ammInfoResult = await client.request(ammInfoParam).catch(() => null)
+      const ammInfoResult = await requestAmmInfo({
+        network: networks.devAmm,
+        params: ammInfoParam,
+      })
       if (ammInfoResult !== null) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = ammInfoResult.result as any
-        pools.push(result.amm)
+        pools.push(ammInfoResult.result.amm as AmmInfo)
       }
     }
-
-    await client.disconnect()
 
     return pools
   }
 
+  const createAmm = async ({
+    asset1,
+    asset2,
+  }: {
+    asset1: {
+      currency: string
+      value: string
+    }
+    asset2: {
+      currency: string
+      value: string
+    }
+  }) => {
+    const coldWallet = fetchColdWallet()
+    const hotWallet = fetchHotWallet()
+
+    const response = await submitAMMCreate({
+      network: networks.devAmm,
+      params: {
+        TransactionType: 'AMMCreate',
+        Account: hotWallet.address,
+        Amount: {
+          currency: asset1.currency,
+          value: asset1.value,
+          issuer: coldWallet.address,
+        } as Amount,
+        Amount2: {
+          currency: asset2.currency,
+          value: asset2.value,
+          issuer: coldWallet.address,
+        } as Amount,
+        TradingFee: 500, // 0.5%
+      },
+      wallet: hotWallet,
+    })
+
+    return response
+  }
+
   return {
     fetchAmmInfo,
+    createAmm,
   }
 }
 

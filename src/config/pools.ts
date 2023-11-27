@@ -1,17 +1,16 @@
-const issuer = process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string
+import type { AMMInfoRequest } from 'xrpl'
+import { btc, eth, bnb } from '@/config/coin'
 
-const btc = 'BTC'
-const eth = 'ETH'
-const bnb = 'BNB'
+const issuer = process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string
 
 export const pools = [
   {
-    asset: btc,
-    asset2: eth,
+    asset: btc.currency,
+    asset2: eth.currency,
   },
   {
-    asset: btc,
-    asset2: bnb,
+    asset: btc.currency,
+    asset2: bnb.currency,
   },
 ]
 
@@ -27,5 +26,5 @@ export const ammInfoParams = pools.map((pool) => {
       issuer: issuer,
     },
     ledger_index: 'validated',
-  }
+  } as AMMInfoRequest
 })
