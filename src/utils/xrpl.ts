@@ -1,9 +1,4 @@
-import type {
-  AMMInfoRequest,
-  AMMInfoResponse,
-  AMMCreate,
-  TxResponse,
-} from 'xrpl'
+import type { AMMInfoRequest, AMMInfoResponse, AMMCreate } from 'xrpl'
 import { Client, Wallet } from 'xrpl'
 
 export const newClient = (network: string) => {
@@ -22,38 +17,38 @@ export const fetchHotWallet = () => {
   )
 }
 
-export const requestAmmInfo = async ({
+export const submitAMMCreate = async ({
   network,
-  params,
+  request,
+  wallet,
 }: {
   network: string
-  params: AMMInfoRequest
-}): Promise<AMMInfoResponse | null> => {
-  console.log('requestAmmInfo', params)
-
+  request: AMMCreate
+  wallet: Wallet
+}) => {
   const client = newClient(network)
   await client.connect()
 
-  const response = await client.request(params).catch(() => null)
+  const response = await client
+    .submitAndWait(request, { wallet })
+    .catch(() => null)
 
   await client.disconnect()
 
   return response
 }
 
-export const submitAMMCreate = async ({
+export const requestAmmInfo = async ({
   network,
-  params,
-  wallet,
+  request,
 }: {
   network: string
-  params: AMMCreate
-  wallet: Wallet
-}): Promise<TxResponse<AMMCreate>> => {
+  request: AMMInfoRequest
+}): Promise<AMMInfoResponse | null> => {
   const client = newClient(network)
   await client.connect()
 
-  const response = await client.submitAndWait(params, { wallet })
+  const response = await client.request(request).catch(() => null)
 
   await client.disconnect()
 

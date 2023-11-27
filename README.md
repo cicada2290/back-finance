@@ -66,3 +66,20 @@ pnpm install
 ```bash
 pnpm dev
 ```
+
+## Directory structure
+
+```bash
+src/
+ ├ app/
+ ├ components/
+ │  ├ elements/
+ │  ├ features/
+ │  └ layouts/
+ ├ config/
+ ├ context/
+ ├ hooks/
+ ├ libs/
+ ├ styles/
+ └ types/
+```

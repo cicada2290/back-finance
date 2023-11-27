@@ -1,7 +1,6 @@
 import type { AMMInfoRequest } from 'xrpl'
 import { btc, eth, bnb } from '@/config/coin'
-
-const issuer = process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string
+import { issuerAddress } from '@/config/wallets'
 
 export const pools = [
   {
@@ -12,6 +11,10 @@ export const pools = [
     asset: btc.currency,
     asset2: bnb.currency,
   },
+  {
+    asset: eth.currency,
+    asset2: bnb.currency,
+  },
 ]
 
 export const ammInfoParams = pools.map((pool) => {
@@ -19,11 +22,11 @@ export const ammInfoParams = pools.map((pool) => {
     command: 'amm_info',
     asset: {
       currency: pool.asset,
-      issuer: issuer,
+      issuer: issuerAddress,
     },
     asset2: {
       currency: pool.asset2,
-      issuer: issuer,
+      issuer: issuerAddress,
     },
     ledger_index: 'validated',
   } as AMMInfoRequest
