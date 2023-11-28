@@ -15,10 +15,9 @@ const AmmInfoCardList: React.FC<AmmInfoCardListProps> = ({ items }) => {
           <AmmInfoCard
             key={index}
             title={`${item.amount.currency}/${item.amount2.currency}`}
-            asset1={item.amount}
-            asset2={item.amount2}
             lpTokenValue={item.lp_token.value}
             tradingFee={item.trading_fee}
+            account={item.account}
           />
         )
       })}

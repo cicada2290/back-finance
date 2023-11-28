@@ -1,4 +1,5 @@
 import type { Balance, IssuedCurrencyAmount } from 'xrpl'
+import { useEffect, useState } from 'react'
 import { networks } from '@/config/site'
 import { ammInfoParams } from '@/config/pools'
 import { requestAmmInfo } from '@/utils/xrpl'
@@ -29,7 +30,11 @@ export interface AmmInfo {
 }
 
 export function useFetchAmmInfo() {
+  const [data, setData] = useState<AmmInfo[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const fetch = async () => {
+    setIsLoading(true)
     const ammList: AmmInfo[] = []
 
     for (const ammInfoParam of ammInfoParams) {
@@ -42,10 +47,25 @@ export function useFetchAmmInfo() {
       }
     }
 
+    setIsLoading(false)
+    setData(ammList)
+
+    console.info('[AmmInfo] ', ammList)
+
     return ammList
   }
 
+  useEffect(() => {
+    ;(async () => {
+      await fetch()
+    })()
+  }, [])
+
   return {
+    // state
+    data,
+    isLoading,
+    // function
     fetch,
   }
 }
