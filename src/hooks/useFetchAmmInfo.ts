@@ -50,6 +50,8 @@ export function useFetchAmmInfo() {
     setIsLoading(false)
     setData(ammList)
 
+    console.info('[AmmInfo] ', ammList)
+
     return ammList
   }
 
