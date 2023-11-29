@@ -6,7 +6,7 @@ import Navbar from '@/components/layouts/navbar'
 import { Link } from '@nextui-org/link'
 import clsx from 'clsx'
 
-import { AccountContextProvider } from '@/context/account-context'
+import { AccountContextProvider } from '@/context/accountContext'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {

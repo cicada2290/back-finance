@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, useDisclosure } from '@nextui-org/react'
-import { useAccountContext } from '@/context/account-context'
+import { useAccountContext } from '@/context/accountContext'
 import WalletInfoModal from '@/components/button/open-wallet-info-modal-button/wallet-info-modal'
 
 const OpenWalletInfoModalButton = () => {

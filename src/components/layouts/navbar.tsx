@@ -19,10 +19,10 @@ import clsx from 'clsx'
 
 import { ThemeSwitch } from '@/components/theme-switch'
 
-import ConnectButton from '@/components/button/connect-button/index'
 import OpenWalletInfoModalButton from '@/components/button/open-wallet-info-modal-button'
+import SelectWalletModalButton from '@/components/features/navbar/SelectWalletModalButton'
 
-import { useAccountContext } from '@/context/account-context'
+import { useAccountContext } from '@/context/accountContext'
 
 const Navbar = () => {
   const { accountData } = useAccountContext()
@@ -61,7 +61,7 @@ const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
-          {!accountData.isConnected && <ConnectButton />}
+          {!accountData.isConnected && <SelectWalletModalButton />}
           {accountData.address && <OpenWalletInfoModalButton />}
         </NavbarItem>
       </NavbarContent>
