@@ -5,8 +5,9 @@ const coins = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'XRPUSDT']
 
 export async function GET() {
   const client = Binance({
-    apiKey: process.env.API_BINANCE_KEY,
-    apiSecret: process.env.API_BINANCE_SECRET,
+    apiKey: 'O14lstrxmuX0Zhv7Zk4pArdIFtH3yK7UjTz4QuhNwfSEFdXWLm6JWo5Utnx3jRJg',
+    apiSecret:
+      '7aZaNViAoMgf39fovzyLRsIEJPufV1m4Sg6Ibjgw3BD6Id2MINpYTqlRQxS0F7VD',
     getTime: new Date().getTime,
   })
 
