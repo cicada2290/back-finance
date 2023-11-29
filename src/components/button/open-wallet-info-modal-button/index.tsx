@@ -3,6 +3,7 @@
 import { Button, useDisclosure } from '@nextui-org/react'
 import { useAccountContext } from '@/context/accountContext'
 import WalletInfoModal from '@/components/button/open-wallet-info-modal-button/wallet-info-modal'
+import { truncateAddress } from '@/utils/string'
 
 const OpenWalletInfoModalButton = () => {
   const { accountData } = useAccountContext()
@@ -10,10 +11,9 @@ const OpenWalletInfoModalButton = () => {
 
   return (
     <>
-      <Button onPress={onOpen}>{`${accountData.address?.slice(
-        0,
-        6
-      )}...${accountData.address?.slice(-6)}`}</Button>
+      <Button onPress={onOpen}>
+        {truncateAddress(accountData.address || '')}
+      </Button>
 
       <WalletInfoModal
         isOpen={isOpen}
