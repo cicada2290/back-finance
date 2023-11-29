@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalBody,
 } from '@nextui-org/react'
-import { useAccountContext } from '@/context/account-context'
+import { useAccountContext } from '@/context/accountContext'
 
 interface WalletInfoModalProps {
   isOpen: boolean
