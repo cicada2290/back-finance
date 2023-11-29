@@ -5,17 +5,12 @@ import { useFetchAmmInfo } from '@/hooks/useFetchAmmInfo'
 import AmmInfoCardList from '@/app/liquidity/components/AmmInfoCardList'
 import PoolCreateButton from '@/app/liquidity/components/PoolCreateButton'
 import PoolDeleteButton from '@/app/liquidity/components/PoolDeleteButton'
-import TitleText from '@/components/elements/typography/TitleText'
 
 export default function LiquidityPage() {
   const { data, isLoading } = useFetchAmmInfo()
 
   return (
     <div>
-      <div className="pb-10">
-        <TitleText text="Liquidity" />
-      </div>
-
       <div className="pb-10">
         <div className=" grid grid-cols-2 gap-2">
           <PoolCreateButton />

@@ -1,3 +1,6 @@
+import type { TrustSet } from 'xrpl'
+import crossmark from '@crossmarkio/sdk'
+
 interface ICrossmark {
   login(): Promise<{
     address: string
@@ -28,28 +31,34 @@ interface ICrossmark {
 
 export default class Crossmark implements ICrossmark {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private crossmark: any
+  private xrpl: any
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(crossmark: any) {
-    this.crossmark = crossmark
+  constructor(xrpl: any) {
+    this.xrpl = xrpl
   }
 
   async login() {
-    const { response } = await this.crossmark.signInAndWait()
+    const { response } = await this.xrpl.signInAndWait()
     // eslint-disable-next-line no-console
     console.info('[Crossmark] response: ', response)
     return response.data
   }
 
+  async submitTrustSet(request: TrustSet): Promise<string> {
+    const id = await crossmark.signAndSubmit(request)
+
+    return id
+  }
+
   logout() {
     // eslint-disable-next-line no-console
-    console.log('logout: ', this.crossmark)
+    console.log('logout: ', this.xrpl)
   }
 
   getXrpBalance() {
     // eslint-disable-next-line no-console
-    console.log('getXrpBalance: ', this.crossmark)
+    console.log('getXrpBalance: ', this.xrpl)
   }
 }
 

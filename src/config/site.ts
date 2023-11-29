@@ -17,6 +17,10 @@ export const siteConfig = {
       label: 'Liquidity',
       href: '/liquidity',
     },
+    {
+      label: 'Faucet',
+      href: '/faucet',
+    },
   ],
   navMenuItems: [
     {
