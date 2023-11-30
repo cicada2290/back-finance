@@ -40,9 +40,11 @@ const useMintToken = () => {
       }
 
       const response = await submitMintToken({
-        network: networks.devAmm,
+        network: networks.default,
         request,
       })
+
+      console.log('[response]', response)
 
       setIsLoading(false)
 

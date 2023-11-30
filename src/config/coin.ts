@@ -7,7 +7,7 @@ interface Asset {
 export const xrp: Asset = {
   currency: 'XRP',
   issuer: '',
-  icon: '',
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/52.png',
 }
 
 export const btc: Asset = {
@@ -28,4 +28,34 @@ export const bnb: Asset = {
   icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png',
 }
 
-export const coins = [xrp, btc, eth, bnb]
+export const sol: Asset = {
+  currency: 'SOL',
+  issuer: 'rpjpQizArxwQcjhWmioaqjojqv634LJ4as',
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png',
+}
+
+export const trx: Asset = {
+  currency: 'TRX',
+  issuer: 'rpjpQizArxwQcjhWmioaqjojqv634LJ4as',
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1958.png',
+}
+
+export const ltc: Asset = {
+  currency: 'LTC',
+  issuer: 'rpjpQizArxwQcjhWmioaqjojqv634LJ4as',
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png',
+}
+
+export const uni: Asset = {
+  currency: 'UNI',
+  issuer: 'rpjpQizArxwQcjhWmioaqjojqv634LJ4as',
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
+}
+
+export const apt: Asset = {
+  currency: 'APT',
+  issuer: 'rpjpQizArxwQcjhWmioaqjojqv634LJ4as',
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png',
+}
+
+export const coins = [xrp, btc, eth, bnb, sol, trx, ltc, uni, apt]

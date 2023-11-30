@@ -36,7 +36,7 @@ export function useSubmitAMMCreate() {
     }
 
     const response = await submitAMMCreate({
-      network: networks.devAmm,
+      network: networks.default,
       request: ammCreateRequest,
       wallet: wallet,
     })

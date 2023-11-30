@@ -17,7 +17,6 @@ const useTrustSet = () => {
 
     const crossmark = new Crossmark(window.xrpl)
     const response = await crossmark.submitTrustSet(request)
-    console.log('response: ', response)
 
     return response
   }
