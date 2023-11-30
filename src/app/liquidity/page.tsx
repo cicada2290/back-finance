@@ -1,28 +1,15 @@
 'use client'
 
-import { Spinner } from '@nextui-org/react'
-import { useFetchAmmInfo } from '@/hooks/useFetchAmmInfo'
-import AmmInfoCardList from '@/app/liquidity/components/AmmInfoCardList'
-import PoolCreateButton from '@/app/liquidity/components/PoolCreateButton'
-import PoolDeleteButton from '@/app/liquidity/components/PoolDeleteButton'
+import useAmmInfo from '@/hooks/useAmmInfo'
+import AmmInfoTable from '@/app/liquidity/components/AmmInfoTable'
 
 export default function LiquidityPage() {
-  const { data, isLoading } = useFetchAmmInfo()
+  const { data, isLoading } = useAmmInfo()
 
   return (
     <div>
       <div className="pb-10">
-        <div className=" grid grid-cols-2 gap-2">
-          <PoolCreateButton />
-          <PoolDeleteButton />
-        </div>
-      </div>
-
-      <div className="pb-10">
-        <div className="grid grid-cols-1 gap-4">
-          {isLoading && <Spinner size="lg" color="secondary" />}
-          {!isLoading && <AmmInfoCardList items={data} />}
-        </div>
+        <AmmInfoTable items={data} isLoading={isLoading} />
       </div>
     </div>
   )

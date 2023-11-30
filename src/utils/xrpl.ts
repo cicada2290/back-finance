@@ -1,14 +1,10 @@
-import type {
-  AMMInfoRequest,
-  AMMInfoResponse,
-  AMMCreate,
-  Payment,
-  TrustSet,
-} from 'xrpl'
+import type { AMMCreate, Payment, TrustSet } from 'xrpl'
+import { networks } from '@/config/site'
 import { Client, Wallet } from 'xrpl'
 
-export const newClient = (network: string) => {
-  return new Client(network)
+export const newClient = (network?: string) => {
+  console.log('[newClient] network: ', network || networks.default)
+  return new Client(network || networks.default)
 }
 
 export const fetchColdWallet = () => {
@@ -75,23 +71,6 @@ export const submitAMMCreate = async ({
   const response = await client
     .submitAndWait(request, { wallet })
     .catch(() => null)
-
-  await client.disconnect()
-
-  return response
-}
-
-export const requestAmmInfo = async ({
-  network,
-  request,
-}: {
-  network: string
-  request: AMMInfoRequest
-}): Promise<AMMInfoResponse | null> => {
-  const client = newClient(network)
-  await client.connect()
-
-  const response = await client.request(request).catch(() => null)
 
   await client.disconnect()
 

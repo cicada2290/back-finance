@@ -21,6 +21,10 @@ export const siteConfig = {
       label: 'Faucet',
       href: '/faucet',
     },
+    {
+      label: 'Token',
+      href: '/token',
+    },
   ],
   navMenuItems: [
     {
@@ -66,6 +70,8 @@ export const siteConfig = {
 }
 
 export const networks = {
+  default: 'wss://amm.devnet.rippletest.net:51233/',
+  test: '',
   dev: 'wss://s.devnet.rippletest.net:51233/',
   devAmm: 'wss://amm.devnet.rippletest.net:51233/',
 }
