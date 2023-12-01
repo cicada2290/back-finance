@@ -21,10 +21,6 @@ export const siteConfig = {
       label: 'Faucet',
       href: '/faucet',
     },
-    {
-      label: 'Token',
-      href: '/token',
-    },
   ],
   navMenuItems: [
     {
@@ -67,11 +63,4 @@ export const siteConfig = {
     discord: 'https://discord.gg/9b6yyZKmH4',
     sponsor: 'https://patreon.com/jrgarciadev',
   },
-}
-
-export const networks = {
-  default: 'wss://amm.devnet.rippletest.net:51233/',
-  test: '',
-  dev: 'wss://s.devnet.rippletest.net:51233/',
-  devAmm: 'wss://amm.devnet.rippletest.net:51233/',
 }

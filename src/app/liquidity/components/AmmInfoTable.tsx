@@ -1,7 +1,7 @@
 'use client'
 
 import type { Data } from '@/hooks/useAmmInfo'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   Button,
   Image,
@@ -14,7 +14,9 @@ import {
   TableCell,
 } from '@nextui-org/react'
 import AmmDepositButton from '@/app/liquidity/components/AmmDepositButton'
+import AmmWithdrawButton from '@/app/liquidity/components/AmmWithdrawButton'
 import PoolCreateButton from '@/app/liquidity/components/PoolCreateButton'
+import PoolDeleteButton from '@/app/liquidity/components/PoolDeleteButton'
 
 type LoadingState =
   | 'loading'
@@ -26,25 +28,18 @@ type LoadingState =
 
 const AmmInfoTable = ({
   items,
-  isLoading,
+  loadingState,
+  refresh,
 }: {
   items: Data[]
-  isLoading?: boolean
+  loadingState?: LoadingState
+  refresh: () => void
 }) => {
-  const [loadingState, setLoadingState] = useState<LoadingState>('loading')
-
-  useEffect(() => {
-    if (isLoading) {
-      setLoadingState('loading')
-    } else {
-      setLoadingState('idle')
-    }
-  }, [isLoading])
-
   const topContent = useMemo(() => {
     return (
-      <div>
-        <PoolCreateButton />
+      <div className="flex justify-center gap-2">
+        <PoolCreateButton refresh={refresh} />
+        <PoolDeleteButton />
       </div>
     )
   }, [])
@@ -122,8 +117,27 @@ const AmmInfoTable = ({
                       : (item.asset1.issuer as string),
                   value: '0',
                 }}
+                refresh={refresh}
               />
-              <Button size="sm">Withdraw</Button>
+              <AmmWithdrawButton
+                amount1={{
+                  currency: item.asset1.currency,
+                  issuer:
+                    item.asset1.currency === 'XRP'
+                      ? ''
+                      : (item.asset1.issuer as string),
+                  value: '100',
+                }}
+                amount2={{
+                  currency: item.asset2.currency,
+                  issuer:
+                    item.asset1.currency === 'XRP'
+                      ? ''
+                      : (item.asset1.issuer as string),
+                  value: '0',
+                }}
+                refresh={refresh}
+              />
             </TableCell>
           </TableRow>
         )}

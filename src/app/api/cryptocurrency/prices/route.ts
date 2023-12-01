@@ -38,5 +38,17 @@ export async function GET() {
       currency: 'APT',
       price: '6.96',
     },
+    {
+      currency: 'DOT',
+      price: '5.48',
+    },
+    {
+      currency: 'ARB',
+      price: '1.2',
+    },
+    {
+      currency: 'SUI',
+      price: '0.63',
+    },
   ])
 }

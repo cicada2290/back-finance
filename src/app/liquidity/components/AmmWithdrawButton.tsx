@@ -1,8 +1,8 @@
 import { Button } from '@nextui-org/react'
-import useAmmDeposit from '@/hooks/useAmmDeposit'
+import useAmmWithdraw from '@/hooks/useAmmWithdraw'
 import { useAccountContext } from '@/context/accountContext'
 
-interface AmmDepositButtonProps {
+interface AmmWithdrawButtonProps {
   amount1: {
     currency: string
     issuer: string
@@ -16,13 +16,13 @@ interface AmmDepositButtonProps {
   refresh: () => void
 }
 
-const AmmDepositButton: React.FC<AmmDepositButtonProps> = ({
+const AmmWithdrawButton: React.FC<AmmWithdrawButtonProps> = ({
   amount1,
   amount2,
   refresh,
 }) => {
   const { accountData } = useAccountContext()
-  const { submit, isLoading } = useAmmDeposit()
+  const { submit, isLoading } = useAmmWithdraw()
 
   const handleSubmit = async () => {
     await submit({
@@ -41,9 +41,9 @@ const AmmDepositButton: React.FC<AmmDepositButtonProps> = ({
       isDisabled={!accountData.address}
       onPress={handleSubmit}
     >
-      Deposit
+      Withdraw
     </Button>
   )
 }
 
-export default AmmDepositButton
+export default AmmWithdrawButton

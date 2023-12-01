@@ -1,10 +1,4 @@
-import type {
-  AMMDeposit,
-  AMMDelete,
-  AMMWithdraw,
-  DepositPreauth,
-  TrustSet,
-} from 'xrpl'
+import type { AMMDeposit, AMMDelete, AMMWithdraw, DepositPreauth } from 'xrpl'
 import crossmark from '@crossmarkio/sdk'
 
 interface ICrossmark {
@@ -49,12 +43,6 @@ export default class Crossmark implements ICrossmark {
     // eslint-disable-next-line no-console
     console.info('[Crossmark] response: ', response)
     return response.data
-  }
-
-  async submitTrustSet(request: TrustSet): Promise<string> {
-    const id = await crossmark.signAndSubmit(request)
-
-    return id
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

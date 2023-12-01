@@ -1,4 +1,3 @@
-import type { LoadingState } from '@/hooks/useFaucetTable'
 import { Button } from '@nextui-org/react'
 import { useAccountContext } from '@/context/accountContext'
 import useTrustSet from '@/hooks/useTrustSet'
@@ -7,14 +6,12 @@ interface FaucetTableTrustSetButtonProps {
   currency: string
   issuer: string
   refresh: () => void
-  setLoadingState: (state: LoadingState) => void
 }
 
 const FaucetTableTrustSetButton: React.FC<FaucetTableTrustSetButtonProps> = ({
   currency,
   issuer,
   refresh,
-  setLoadingState,
 }) => {
   const { submit } = useTrustSet()
 
@@ -22,8 +19,6 @@ const FaucetTableTrustSetButton: React.FC<FaucetTableTrustSetButtonProps> = ({
 
   const handleTrustSet = async (currency: string, issuer: string) => {
     if (!accountData.address) return
-
-    setLoadingState('loading')
 
     await submit({
       account: accountData.address,
@@ -35,8 +30,6 @@ const FaucetTableTrustSetButton: React.FC<FaucetTableTrustSetButtonProps> = ({
     })
 
     refresh()
-
-    setLoadingState('idle')
   }
 
   return (
