@@ -3,7 +3,7 @@ import { Button } from '@nextui-org/react'
 import { getAssetPrice } from '@/utils/asset'
 import Xrpl from '@/libs/xrpl'
 
-const PoolCreateButton = () => {
+const PoolCreateButton = ({ refresh }: { refresh: () => void }) => {
   const fetchPrices = async () => {
     const response = await fetch('/api/cryptocurrency/prices')
     const json = await response.json()
@@ -17,6 +17,7 @@ const PoolCreateButton = () => {
     const client = new Xrpl()
     const issuerWallet = client.getIssuerWallet()
 
+    // MEMO: CREATE POOLはここで手動で作成する
     const baseAsset = {
       currency: 'XRP',
       issuer: issuerWallet.address,
@@ -24,7 +25,7 @@ const PoolCreateButton = () => {
     }
 
     const quoteAsset = {
-      currency: 'BTC',
+      currency: 'BNB',
       issuer: issuerWallet.address,
       value: '',
     }
@@ -51,6 +52,8 @@ const PoolCreateButton = () => {
       const response = await client.ammCreate(request)
 
       console.info('[AMMCreate] response: ', response)
+
+      refresh()
 
       return response
     } catch (error: unknown) {

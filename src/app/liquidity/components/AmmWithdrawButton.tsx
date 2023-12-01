@@ -13,26 +13,33 @@ interface AmmWithdrawButtonProps {
     issuer: string
     value: string
   }
+  refresh: () => void
 }
 
 const AmmWithdrawButton: React.FC<AmmWithdrawButtonProps> = ({
   amount1,
   amount2,
+  refresh,
 }) => {
   const { accountData } = useAccountContext()
-  const { submit } = useAmmWithdraw()
+  const { submit, isLoading } = useAmmWithdraw()
+
+  const handleSubmit = async () => {
+    await submit({
+      account: accountData.address || '',
+      asset1: amount1,
+      asset2: amount2,
+    })
+
+    refresh()
+  }
 
   return (
     <Button
       size="sm"
+      isLoading={isLoading}
       isDisabled={!accountData.address}
-      onPress={() =>
-        submit({
-          account: accountData.address || '',
-          asset1: amount1,
-          asset2: amount2,
-        })
-      }
+      onPress={handleSubmit}
     >
       Withdraw
     </Button>

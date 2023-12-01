@@ -28,15 +28,25 @@ export interface Data {
   }
 }
 
+export type LoadingState =
+  | 'loading'
+  | 'sorting'
+  | 'loadingMore'
+  | 'error'
+  | 'idle'
+  | 'filtering'
+
 const useAmmInfo = () => {
   const [data, setData] = useState<Data[]>([])
   const [error, setError] = useState<Error>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loadingState, setLoadingState] = useState<LoadingState>('loading')
 
   const fetchData = async () => {
     const result: Data[] = []
 
     setIsLoading(true)
+    setLoadingState('loading')
     try {
       const client = new Xrpl()
 
@@ -47,7 +57,10 @@ const useAmmInfo = () => {
       for (const request of requests) {
         // Fetch AMMInfo
         const response = await client.ammInfo(request).catch(() => undefined)
-        if (!response) continue
+        if (!response) {
+          continue
+        }
+
         console.info(
           '[AMMInfo]: ',
           request.asset?.currency,
@@ -119,6 +132,7 @@ const useAmmInfo = () => {
       }
     } finally {
       setIsLoading(false)
+      setLoadingState('idle')
     }
   }
 
@@ -133,6 +147,7 @@ const useAmmInfo = () => {
     data,
     error,
     isLoading,
+    loadingState,
     // function
     fetchData,
   }

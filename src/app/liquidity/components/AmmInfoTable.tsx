@@ -1,7 +1,7 @@
 'use client'
 
 import type { Data } from '@/hooks/useAmmInfo'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   Button,
   Image,
@@ -28,25 +28,17 @@ type LoadingState =
 
 const AmmInfoTable = ({
   items,
-  isLoading,
+  loadingState,
+  refresh,
 }: {
   items: Data[]
-  isLoading?: boolean
+  loadingState?: LoadingState
+  refresh: () => void
 }) => {
-  const [loadingState, setLoadingState] = useState<LoadingState>('loading')
-
-  useEffect(() => {
-    if (isLoading) {
-      setLoadingState('loading')
-    } else {
-      setLoadingState('idle')
-    }
-  }, [isLoading])
-
   const topContent = useMemo(() => {
     return (
       <div className="flex justify-center gap-2">
-        <PoolCreateButton />
+        <PoolCreateButton refresh={refresh} />
         <PoolDeleteButton />
       </div>
     )
@@ -125,6 +117,7 @@ const AmmInfoTable = ({
                       : (item.asset1.issuer as string),
                   value: '0',
                 }}
+                refresh={refresh}
               />
               <AmmWithdrawButton
                 amount1={{
@@ -143,6 +136,7 @@ const AmmInfoTable = ({
                       : (item.asset1.issuer as string),
                   value: '0',
                 }}
+                refresh={refresh}
               />
             </TableCell>
           </TableRow>

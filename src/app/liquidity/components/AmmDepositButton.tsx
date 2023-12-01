@@ -13,26 +13,33 @@ interface AmmDepositButtonProps {
     issuer: string
     value: string
   }
+  refresh: () => void
 }
 
 const AmmDepositButton: React.FC<AmmDepositButtonProps> = ({
   amount1,
   amount2,
+  refresh,
 }) => {
   const { accountData } = useAccountContext()
-  const { submit } = useAmmDeposit()
+  const { submit, isLoading } = useAmmDeposit()
+
+  const handleSubmit = async () => {
+    await submit({
+      account: accountData.address || '',
+      asset1: amount1,
+      asset2: amount2,
+    })
+
+    refresh()
+  }
 
   return (
     <Button
       size="sm"
+      isLoading={isLoading}
       isDisabled={!accountData.address}
-      onPress={() =>
-        submit({
-          account: accountData.address || '',
-          asset1: amount1,
-          asset2: amount2,
-        })
-      }
+      onPress={handleSubmit}
     >
       Deposit
     </Button>

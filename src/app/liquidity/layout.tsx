@@ -10,7 +10,7 @@ export default function LiquidityLayout({
       <div className="inline-block max-w-xl text-center justify-center">
         <div className="pb-10">
           <TitleText text="Liquidity" />
-          <p className="pt-5">A fixed deposit of 100 XRP is possible.</p>
+          <p className="pt-5">A fixed deposit of 10 XRP is possible.</p>
         </div>
         {children}
       </div>
