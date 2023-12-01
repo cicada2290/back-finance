@@ -90,12 +90,12 @@ const AmmInfoTable = ({
               </p>
             </TableCell>
             <TableCell>
-              <p>$0</p>
+              <p>${item.my.price}</p>
               <p className="text-bold text-sm capitalize text-default-400">
-                0 {item.asset1.currency}
+                {item.my.amount1} {item.asset1.currency}
               </p>
               <p className="text-bold text-sm capitalize text-default-400">
-                0 {item.asset2.currency}
+                {item.my.amount2} {item.asset2.currency}
               </p>
             </TableCell>
             <TableCell className="grid grid-cols-1 gap-2">

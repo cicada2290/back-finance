@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Commands } from '@/config/xrpl/commands'
 import { getAssetName, getAssetIcon, getAssetPrice } from '@/utils/asset'
 import { requests } from '@/config/xrpl/request/ammInfo'
+import { useAccountContext } from '@/context/accountContext'
 import Xrpl from '@/libs/xrpl'
 
 const issuerAddress = process.env
@@ -26,6 +28,11 @@ export interface Data {
     account: string
     price: number
   }
+  my: {
+    amount1: string
+    amount2: string
+    price: string
+  }
 }
 
 export type LoadingState =
@@ -42,16 +49,46 @@ const useAmmInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [loadingState, setLoadingState] = useState<LoadingState>('loading')
 
+  const { accountData } = useAccountContext()
+
+  /**
+   * fetchPrices
+   */
+  const fetchPrices = async () => {
+    const { data: prices } = await axios.get('/api/cryptocurrency/prices')
+    return prices
+  }
+
+  /**
+   * fetchAccountLines
+   */
+  const fetchAccountLines = async (client: Xrpl) => {
+    let lines: {
+      account: string
+      balance: string
+    }[] = []
+    if (accountData.address) {
+      const accountLines = await client.accountLines({
+        command: Commands.accountLines,
+        account: accountData.address,
+      })
+      lines = accountLines.result.lines.map((line) => ({
+        account: line.account,
+        balance: line.balance,
+      }))
+      console.info('[AccountLine] ', lines)
+    }
+    return lines
+  }
+
   const fetchData = async () => {
     const result: Data[] = []
-
-    setIsLoading(true)
-    setLoadingState('loading')
     try {
+      setIsLoading(true)
+      setLoadingState('loading')
       const client = new Xrpl()
-
-      // Fetch price
-      const { data: prices } = await axios.get('/api/cryptocurrency/prices')
+      const prices = await fetchPrices()
+      const lines = await fetchAccountLines(client)
 
       let counter = 1
       for (const request of requests) {
@@ -65,8 +102,18 @@ const useAmmInfo = () => {
           '[AMMInfo]: ',
           request.asset?.currency,
           request.asset2?.currency,
-          response
+          response.result.amm
         )
+
+        // My data
+        const myLp: { account: string; balance: string } | undefined =
+          lines.find((line) => line.account === response.result.amm.account)
+
+        let lpRate = 0
+        if (myLp) {
+          lpRate =
+            Number(myLp.balance) / Number(response.result.amm.lp_token.value)
+        }
 
         // AMMInfo
         const ammInfo = response.result.amm
@@ -100,7 +147,7 @@ const useAmmInfo = () => {
             issuer: baseAssetName === 'XRP' ? undefined : issuerAddress,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            value: baseAssetValue,
+            value: Number(baseAssetValue).toFixed(6),
             icon: getAssetIcon(baseAssetName),
           },
           asset2: {
@@ -108,12 +155,20 @@ const useAmmInfo = () => {
             issuer: quoteAssetName === 'XRP' ? undefined : issuerAddress,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            value: quoteAssetValue,
+            value: Number(quoteAssetValue).toFixed(6),
             icon: getAssetIcon(quoteAssetName),
           },
           lp: {
             account: ammInfo.account,
             price: lpPrice,
+          },
+          my: {
+            amount1: (baseAssetValue * lpRate).toFixed(6),
+            amount2: (quoteAssetValue * lpRate).toFixed(6),
+            price: Number(
+              baseAssetValue * lpRate * Number(baseAsestPrice) +
+                quoteAssetValue * lpRate * Number(quoteAssetPrice)
+            ).toFixed(2),
           },
         }
 
@@ -141,6 +196,12 @@ const useAmmInfo = () => {
       await fetchData()
     })()
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      await fetchData()
+    })()
+  }, [accountData.address])
 
   return {
     // state
