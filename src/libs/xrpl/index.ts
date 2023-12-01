@@ -1,6 +1,8 @@
 import type {
   BaseResponse,
   // request
+  AccountCurrenciesRequest,
+  AccountCurrenciesResponse,
   AccountLinesRequest,
   AccountLinesResponse,
   AMMInfoRequest,
@@ -23,7 +25,10 @@ interface SubmitAndWaitProps {
   wallet?: Wallet
 }
 
-type RequestProps = AccountLinesRequest | AMMInfoRequest
+type RequestProps =
+  | AccountCurrenciesRequest
+  | AccountLinesRequest
+  | AMMInfoRequest
 
 export default class Xrpl {
   private client: Client
@@ -127,8 +132,8 @@ export default class Xrpl {
   }): Promise<TxResponse> {
     const request: Payment = {
       TransactionType: TransactionTypes.Payment,
-      Account: to,
-      Destination: this.issuerWallet.address,
+      Account: this.issuerWallet.address,
+      Destination: to,
       Amount: {
         currency: currency,
         issuer: this.issuerWallet.address,
@@ -157,7 +162,7 @@ export default class Xrpl {
         LimitAmount: {
           issuer: this.issuerWallet.address,
           currency: currency,
-          value: '1000000000000',
+          value: '10000000000',
         },
       } as TrustSet,
       wallet: this.operatorWallet,
@@ -172,6 +177,13 @@ export default class Xrpl {
   async ammInfo(request: AMMInfoRequest): Promise<AMMInfoResponse> {
     const response = await this.request(request)
     return response as AMMInfoResponse
+  }
+
+  async accountCurrencies(
+    request: AccountCurrenciesRequest
+  ): Promise<AccountCurrenciesResponse> {
+    const response = await this.request(request)
+    return response as AccountCurrenciesResponse
   }
 
   async accountLines(

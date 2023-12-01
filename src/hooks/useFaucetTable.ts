@@ -9,6 +9,7 @@ export interface FaucetTableData {
   issuer: string
   icon: string
   isTrusted: boolean
+  isMinted: boolean
   balance: string
 }
 
@@ -25,25 +26,33 @@ const useFaucetTable = () => {
   const [loadingState, setLoadingState] = useState<LoadingState>('loading')
   const { accountData } = useAccountContext()
 
-  const fetchTrustInfo = async () => {
-    if (!accountData.address) return null
-
-    const client = new Xrpl()
-
-    const response = await client.accountLines({
-      command: Commands.accountLines,
-      account: accountData.address,
-    })
-
-    return response.result.lines
-  }
-
   const fetchData = async () => {
     try {
       setLoadingState('loading')
 
-      const trustInfo = await fetchTrustInfo()
-      console.log('[trustInfo]', trustInfo)
+      const client = new Xrpl()
+
+      const issuerWallet = client.getIssuerWallet()
+
+      // Fetch account currencies
+      const accountCurrencies = await client.accountCurrencies({
+        command: Commands.accountCurrencies,
+        account: issuerWallet.address,
+      })
+      const mintedCurrencies = accountCurrencies.result.receive_currencies
+      console.log('[accountCurrencies]', mintedCurrencies)
+
+      // Fetch account lines
+      let accountLines = null
+      if (accountData.address) {
+        const response = await await client.accountLines({
+          command: Commands.accountLines,
+          account: accountData.address,
+        })
+
+        accountLines = response.result.lines
+      }
+      console.log('[accountLines]', accountLines)
 
       const coinlist = []
       for (const coin of coins) {
@@ -51,13 +60,13 @@ const useFaucetTable = () => {
 
         let isTrusted = false
         let balane = '0'
-        if (trustInfo) {
-          isTrusted = trustInfo.some(
+        if (accountLines) {
+          isTrusted = accountLines.some(
             (trust) =>
               trust.currency === coin.currency && trust.account === coin.issuer
           )
           balane =
-            trustInfo.find(
+            accountLines.find(
               (trust) =>
                 trust.currency === coin.currency &&
                 trust.account === coin.issuer
@@ -70,6 +79,7 @@ const useFaucetTable = () => {
           icon: coin.icon || '',
           isTrusted: isTrusted,
           balance: balane,
+          isMinted: mintedCurrencies.includes(coin.currency),
         })
       }
 

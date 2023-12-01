@@ -60,4 +60,35 @@ export const apt: Asset = {
   icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/21794.png',
 }
 
-export const coins = [xrp, btc, eth, bnb, sol, trx, ltc, uni, apt]
+export const dot: Asset = {
+  currency: 'DOT',
+  issuer: issuer,
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
+}
+
+export const arb: Asset = {
+  currency: 'ARB',
+  issuer: issuer,
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png',
+}
+
+export const sui: Asset = {
+  currency: 'SUI',
+  issuer: issuer,
+  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png',
+}
+
+export const coins = [
+  xrp,
+  btc,
+  eth,
+  bnb,
+  sol,
+  trx,
+  ltc,
+  uni,
+  apt,
+  dot,
+  arb,
+  sui,
+]
