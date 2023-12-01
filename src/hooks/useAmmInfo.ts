@@ -63,7 +63,11 @@ const useAmmInfo = () => {
         const baseAssetValue =
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          baseAssetName === 'XRP' ? ammInfo.amount : ammInfo.amount.value
+          baseAssetName === 'XRP'
+            ? Number(ammInfo.amount) / Number(1000000)
+            : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              ammInfo.amount.value
         const baseAsestPrice = getAssetPrice(baseAssetName, prices)
         const quoteAssetName = getAssetName(ammInfo.amount2)
         const quoteAssetValue =

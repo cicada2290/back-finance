@@ -1,8 +1,7 @@
 import type { AMMCreate } from 'xrpl'
 import { Button } from '@nextui-org/react'
 import { getAssetPrice } from '@/utils/asset'
-import { networks } from '@/config/site'
-import { fetchColdWallet, newClient } from '@/utils/xrpl'
+import Xrpl from '@/libs/xrpl'
 
 const PoolCreateButton = () => {
   const fetchPrices = async () => {
@@ -15,50 +14,45 @@ const PoolCreateButton = () => {
   const handleCreatePool = async () => {
     const pricelist = await fetchPrices()
 
+    const client = new Xrpl()
+    const issuerWallet = client.getIssuerWallet()
+
     const baseAsset = {
       currency: 'XRP',
-      issuer: process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string,
-      value: '10000000',
+      issuer: issuerWallet.address,
+      value: String(1000 * 1000000),
     }
 
     const quoteAsset = {
-      currency: 'SOL',
-      issuer: process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string,
+      currency: 'BTC',
+      issuer: issuerWallet.address,
       value: '',
     }
 
     const baseAssetPrice = await getAssetPrice(baseAsset.currency, pricelist)
     const quoteAssetPrice = await getAssetPrice(quoteAsset.currency, pricelist)
-    const rate = Number(baseAssetPrice) / Number(quoteAssetPrice)
+    const rate = Number(baseAssetPrice) / Number(quoteAssetPrice) / 1000000
 
     quoteAsset.value = String((Number(baseAsset.value) * rate).toFixed(6))
 
-    console.log('[quoteAsset]', quoteAsset)
+    console.info('[baseAsset]', baseAsset)
+    console.info('[quoteAsset]', quoteAsset)
 
     try {
-      const issuerWallet = await fetchColdWallet()
-
       const request: AMMCreate = {
         TransactionType: 'AMMCreate',
         Account: issuerWallet.address,
-        Amount: '100000',
+        Amount: baseAsset.value,
         Amount2: quoteAsset,
         TradingFee: 500,
       }
+      console.info('[AMMCreate] request: ', request)
 
-      const client = newClient(networks.default)
-      await client.connect()
+      const response = await client.ammCreate(request)
 
-      const response = await client.submitAndWait(request, {
-        wallet: issuerWallet,
-      })
-      console.log('[AMMCreate]', response)
+      console.info('[AMMCreate] response: ', response)
 
-      await client.disconnect()
-
-      // const id = await crossmark.signAndSubmitAndWait(request)
-
-      // console.info("[Create pool]", id)
+      return response
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message)

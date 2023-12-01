@@ -1,7 +1,6 @@
 import type { Payment } from 'xrpl'
 import { useState } from 'react'
-import { submitMintToken } from '@/utils/xrpl'
-import { networks } from '@/config/site'
+import Xrpl from '@/libs/xrpl'
 
 const useMintToken = () => {
   const [error, setError] = useState<Error>()
@@ -28,7 +27,9 @@ const useMintToken = () => {
     try {
       initState()
 
-      const request: Payment = {
+      const client = new Xrpl()
+
+      const response = await client.mintToken({
         TransactionType: 'Payment',
         Account: issuer,
         Destination: account,
@@ -37,14 +38,9 @@ const useMintToken = () => {
           issuer,
           value,
         },
-      }
+      } as Payment)
 
-      const response = await submitMintToken({
-        network: networks.default,
-        request,
-      })
-
-      console.log('[response]', response)
+      console.log('[MintToken]', response)
 
       setIsLoading(false)
 

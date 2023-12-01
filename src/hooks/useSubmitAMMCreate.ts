@@ -1,7 +1,5 @@
 import type { AMMCreate, Amount } from 'xrpl'
-import { networks } from '@/config/site'
-import { issuerAddress } from '@/config/wallets'
-import { submitAMMCreate, fetchHotWallet } from '@/utils/xrpl'
+import Xrpl from '@/libs/xrpl'
 
 interface AMMCreateRequest {
   asset1: {
@@ -17,29 +15,26 @@ interface AMMCreateRequest {
 
 export function useSubmitAMMCreate() {
   const submit = async ({ asset1, asset2, tradingFee }: AMMCreateRequest) => {
-    const wallet = fetchHotWallet()
+    const client = new Xrpl()
 
-    const ammCreateRequest: AMMCreate = {
+    const issuerWallet = client.getIssuerWallet()
+    const operatorWallet = client.getOperatorWallet()
+
+    const response = await client.ammCreate({
       TransactionType: 'AMMCreate',
-      Account: wallet.address,
+      Account: operatorWallet.address,
       Amount: {
         currency: asset1.currency,
         value: asset1.value,
-        issuer: issuerAddress,
+        issuer: issuerWallet.address,
       } as Amount,
       Amount2: {
         currency: asset2.currency,
         value: asset2.value,
-        issuer: issuerAddress,
+        issuer: issuerWallet.address,
       } as Amount,
       TradingFee: tradingFee,
-    }
-
-    const response = await submitAMMCreate({
-      network: networks.default,
-      request: ammCreateRequest,
-      wallet: wallet,
-    })
+    } as AMMCreate)
 
     return response
   }

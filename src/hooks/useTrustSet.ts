@@ -1,5 +1,5 @@
 import type { TrustSet, IssuedCurrencyAmount } from 'xrpl'
-import Crossmark from '@/utils/wallet/crossmark'
+import crossmark from '@crossmarkio/sdk'
 
 const useTrustSet = () => {
   const submit = async ({
@@ -9,14 +9,11 @@ const useTrustSet = () => {
     account: string
     limitAmount: IssuedCurrencyAmount
   }) => {
-    const request: TrustSet = {
+    const response = await crossmark.signAndSubmit({
       TransactionType: 'TrustSet',
       Account: account,
       LimitAmount: limitAmount,
-    }
-
-    const crossmark = new Crossmark(window.xrpl)
-    const response = await crossmark.submitTrustSet(request)
+    } as TrustSet)
 
     return response
   }

@@ -11,13 +11,12 @@ import {
   TableCell,
   User,
 } from '@nextui-org/react'
-import { networks } from '@/config/site'
+import { TransactionTypes } from '@/config/xrpl/transactions'
 import { truncateAddress } from '@/utils/string'
+import Xrpl from '@/libs/xrpl'
 import useFaucetTable from '@/hooks/useFaucetTable'
 import FaucetTableMintButton from '@/app/faucet/components/FaucetTableMintButton'
 import FaucetTableTrustSetButton from '@/app/faucet/components/FaucetTableTrustSetButton'
-
-import { newClient, fetchColdWallet, fetchHotWallet } from '@/utils/xrpl'
 
 const FaucetTable = () => {
   const {
@@ -28,57 +27,35 @@ const FaucetTable = () => {
   } = useFaucetTable()
 
   const createToken = async () => {
-    const currency = 'SOL'
+    const currency = 'BNB'
     // const currency = Math.random().toString(36).slice(-3).toUpperCase()
     console.log('create: ', currency)
 
-    const client = newClient(networks.default)
-    await client.connect()
+    const client = new Xrpl()
 
-    const issuerWallet = await fetchColdWallet()
-    const res1 = await client.submitAndWait(
-      {
-        TransactionType: 'AccountSet',
-        Account: issuerWallet.address,
-        SetFlag: AccountSetAsfFlags.asfDefaultRipple,
-      },
-      { wallet: issuerWallet }
-    )
-    console.log('AccountSet: ', res1)
+    const issuerWallet = client.getIssuerWallet()
+    const operatorWallet = client.getOperatorWallet()
 
-    const operatorWallet = await fetchHotWallet()
-    const res2 = await client.submitAndWait(
-      {
-        TransactionType: 'TrustSet',
-        Account: operatorWallet.address,
-        LimitAmount: {
-          issuer: issuerWallet.address,
-          currency: currency,
-          value: '100',
-        },
-      },
-      { wallet: operatorWallet }
-    )
-    console.log('TrustSet: ', res2)
+    const accountSetResponse = await client.accountSet({
+      TransactionType: TransactionTypes.AccountSet,
+      Account: issuerWallet.address,
+      SetFlag: AccountSetAsfFlags.asfDefaultRipple,
+    })
 
-    const res3 = await client.submitAndWait(
-      {
-        TransactionType: 'Payment',
-        Account: issuerWallet.address,
-        Destination: operatorWallet.address,
-        Amount: {
-          issuer: issuerWallet.address,
-          currency: currency,
-          value: '5000',
-        },
-      },
-      { wallet: issuerWallet }
-    )
-    console.log('Payment: ', res3)
+    console.log('[AccountSet] ', accountSetResponse)
 
-    console.log('create token: ', currency)
+    const trustSetResponse = await client.trustSetForOperator({ currency })
+    console.log('[TrustSet] ', trustSetResponse)
 
-    await client.disconnect()
+    const paymentResponse = await client.paymentFromIssuer({
+      to: operatorWallet.address,
+      currency,
+      amount: '5000',
+    })
+
+    console.log('[Payment] ', paymentResponse)
+
+    console.log('create token: success: ', currency)
   }
 
   const topContent = useMemo(() => {

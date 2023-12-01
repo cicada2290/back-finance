@@ -14,7 +14,9 @@ import {
   TableCell,
 } from '@nextui-org/react'
 import AmmDepositButton from '@/app/liquidity/components/AmmDepositButton'
+import AmmWithdrawButton from '@/app/liquidity/components/AmmWithdrawButton'
 import PoolCreateButton from '@/app/liquidity/components/PoolCreateButton'
+import PoolDeleteButton from '@/app/liquidity/components/PoolDeleteButton'
 
 type LoadingState =
   | 'loading'
@@ -43,8 +45,9 @@ const AmmInfoTable = ({
 
   const topContent = useMemo(() => {
     return (
-      <div>
+      <div className="flex justify-center gap-2">
         <PoolCreateButton />
+        <PoolDeleteButton />
       </div>
     )
   }, [])
@@ -123,7 +126,24 @@ const AmmInfoTable = ({
                   value: '0',
                 }}
               />
-              <Button size="sm">Withdraw</Button>
+              <AmmWithdrawButton
+                amount1={{
+                  currency: item.asset1.currency,
+                  issuer:
+                    item.asset1.currency === 'XRP'
+                      ? ''
+                      : (item.asset1.issuer as string),
+                  value: '100',
+                }}
+                amount2={{
+                  currency: item.asset2.currency,
+                  issuer:
+                    item.asset1.currency === 'XRP'
+                      ? ''
+                      : (item.asset1.issuer as string),
+                  value: '0',
+                }}
+              />
             </TableCell>
           </TableRow>
         )}

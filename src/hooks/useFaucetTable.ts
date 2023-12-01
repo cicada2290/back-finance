@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Networks } from '@/config/networks'
 import { coins } from '@/config/coin'
 import { useAccountContext } from '@/context/accountContext'
-import { requestAccountLines } from '@/utils/xrpl'
+import Xrpl from '@/libs/xrpl'
+import { Commands } from '@/config/xrpl/commands'
 
 export interface FaucetTableData {
   currency: string
@@ -28,12 +28,14 @@ const useFaucetTable = () => {
   const fetchTrustInfo = async () => {
     if (!accountData.address) return null
 
-    const { result } = await requestAccountLines({
-      network: Networks.default,
+    const client = new Xrpl()
+
+    const response = await client.accountLines({
+      command: Commands.accountLines,
       account: accountData.address,
     })
 
-    return result.lines
+    return response.result.lines
   }
 
   const fetchData = async () => {
