@@ -1,6 +1,6 @@
 const issuer = process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS
 
-interface Asset {
+export interface Asset {
   currency: string
   issuer?: string
   icon?: string
