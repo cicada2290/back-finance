@@ -1,8 +1,8 @@
 import React from 'react'
 import { Divider, Input, Button } from '@nextui-org/react'
-import { SettingsIcon } from '@/components/icons'
-import { RefreshIcon } from '@/components/icons'
-import { UpDownIcon } from '@/components/icons'
+import { SettingsIcon } from '@/components/elements/Icons'
+import { RefreshIcon } from '@/components/elements/Icons'
+import { UpDownIcon } from '@/components/elements/Icons'
 
 export default function DocsPage() {
   return (

@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import type { Metadata, Viewport } from 'next'
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/config/fonts'
-import Navbar from '@/components/layouts/navbar'
+import Navbar from '@/components/layouts/Navbar'
 import { Link } from '@nextui-org/link'
 import clsx from 'clsx'
 
