@@ -10,31 +10,58 @@ const useOfferCreate = () => {
 
   const { accountData } = useAccountContext()
 
-  const submit = async () => {
+  const submit = async (
+    sourceCurrency: string,
+    sourceValue: string,
+    destinationCurrency: string,
+    destinationValue: string
+  ) => {
     setIsLoading(true)
-
+    console.log('accountData: ', accountData)
     if (!accountData.address) return null
 
     try {
+      const issuer_param = 'rLxCx6CCdbjaSM81PEYf6GQSPNAcbKQQDZ'
+      let takerGets:
+        | string
+        | { currency: string; issuer: string; value: string } = ''
+      let takerPays:
+        | string
+        | { currency: string; issuer: string; value: string } = ''
+      // スワップ元
+      switch (sourceCurrency) {
+        case 'XRP':
+          takerGets = sourceValue
+          break
+        default:
+          takerGets = {
+            currency: sourceCurrency,
+            issuer: issuer_param,
+            value: sourceValue,
+          }
+          break
+      }
+      // スワップ先
+      switch (destinationCurrency) {
+        case 'XRP':
+          takerPays = destinationValue
+          break
+        default:
+          takerPays = {
+            currency: destinationCurrency,
+            issuer: issuer_param,
+            value: destinationValue,
+          }
+          break
+      }
       const request: OfferCreate = {
         TransactionType: TransactionTypes.OfferCreate,
         Account: accountData.address,
-        /*
-        TakerPays: {
-          currency: 'BTC',
-          issuer: 'rLxCx6CCdbjaSM81PEYf6GQSPNAcbKQQDZ',
-          value: '0.015',
-        },
-        TakerGets: "10000000",
-        */
-        TakerGets: {
-          currency: 'BTC',
-          issuer: 'rLxCx6CCdbjaSM81PEYf6GQSPNAcbKQQDZ',
-          value: '0.015',
-        },
-        TakerPays: '10000000',
+        TakerGets: takerGets,
+        TakerPays: takerPays,
         Flags: 65536,
       }
+      console.log('request: ', request)
       const response = await crossmark.signAndSubmit(request)
       console.info('[OfferCreate]: ', response)
     } catch (error: unknown) {
