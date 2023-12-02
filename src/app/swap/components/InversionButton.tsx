@@ -4,17 +4,13 @@ import { Button } from '@nextui-org/react'
 import { UpDownIcon } from '@/components/icons'
 
 interface InversionButtonProps {
-    onClick: () => void
+  onClick: () => void
 }
 
-const InversionButton: React.FC<InversionButtonProps> = ({
-    onClick
-}) => {
+const InversionButton: React.FC<InversionButtonProps> = ({ onClick }) => {
   return (
-    <> 
-      <Button 
-        onClick={onClick}
-        isIconOnly>
+    <>
+      <Button onClick={onClick} isIconOnly>
         <UpDownIcon />
       </Button>
     </>

@@ -17,13 +17,17 @@ const useOfferCreate = () => {
     destinationValue: string
   ) => {
     setIsLoading(true)
-    console.log("accountData: ", accountData)
+    console.log('accountData: ', accountData)
     if (!accountData.address) return null
 
     try {
       const issuer_param = 'rLxCx6CCdbjaSM81PEYf6GQSPNAcbKQQDZ'
-      let takerGets: string | { currency: string, issuer: string, value: string } = "";
-      let takerPays: string | { currency: string, issuer: string, value: string } = "";
+      let takerGets:
+        | string
+        | { currency: string; issuer: string; value: string } = ''
+      let takerPays:
+        | string
+        | { currency: string; issuer: string; value: string } = ''
       // スワップ元
       switch (sourceCurrency) {
         case 'XRP':
@@ -57,7 +61,7 @@ const useOfferCreate = () => {
         TakerPays: takerPays,
         Flags: 65536,
       }
-      console.log("request: ", request)
+      console.log('request: ', request)
       const response = await crossmark.signAndSubmit(request)
       console.info('[OfferCreate]: ', response)
     } catch (error: unknown) {

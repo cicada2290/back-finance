@@ -3,22 +3,22 @@
 import { Button } from '@nextui-org/react'
 
 interface SwapButtonProps {
-    onClick: () => void
+  onClick: () => void
+  isLoding: boolean
 }
 
-const SwapButton: React.FC<SwapButtonProps> = ({
-    onClick
-}) => {
+const SwapButton: React.FC<SwapButtonProps> = ({ onClick, isLoding }) => {
   return (
     <>
-      <Button 
-        fullWidth 
-        variant="flat" 
+      <Button
+        fullWidth
+        variant="flat"
         color="success"
         onClick={onClick}
-        >
-          Swap
-        </Button>
+        isLoading={isLoding}
+      >
+        Swap
+      </Button>
     </>
   )
 }
