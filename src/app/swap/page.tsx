@@ -14,10 +14,10 @@ export default function DocsPage() {
     /********** 状態管理 **********/
   }
   // スワップ元・スワップ先の状態を管理
-  const [sourceCurrency, setSourceCurrency] = useState('')
-  const [sourceValue, setSourceValue] = useState('')
-  const [destinationCurrency, setDestinationCurrency] = useState('')
-  const [destinationValue, setDestinationValue] = useState('')
+  const [sourceCurrency, setSourceCurrency] = useState('XRP')
+  const [sourceValue, setSourceValue] = useState('0.0')
+  const [destinationCurrency, setDestinationCurrency] = useState('XRP')
+  const [destinationValue, setDestinationValue] = useState('0.0')
   // スワップ処理
   const { error, isLoading, submit } = useOfferCreate()
 
