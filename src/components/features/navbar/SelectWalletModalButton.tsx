@@ -1,5 +1,5 @@
 import { Button, useDisclosure } from '@nextui-org/react'
-import ConnectWalletModal from './SelectWalletModal'
+import SelectWalletModal from '@/components/features/navbar/SelectWalletModal'
 
 const SelectWalletModalButton = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
@@ -7,7 +7,7 @@ const SelectWalletModalButton = () => {
   return (
     <>
       <Button onPress={onOpen}>Connect</Button>
-      <ConnectWalletModal
+      <SelectWalletModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}

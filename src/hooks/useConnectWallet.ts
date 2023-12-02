@@ -30,6 +30,8 @@ const useConnectWallet = () => {
       const client = new Crossmark(window.xrpl.crossmark)
       const response = await client.login()
 
+      if (response.meta.isRejected) return
+
       // set account
       setAccountData({
         isConnected: true,
@@ -37,6 +39,7 @@ const useConnectWallet = () => {
         address: response.address,
         balance: 0,
       })
+
       setAccount(response.address)
       setIsLoading(false)
 
