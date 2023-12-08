@@ -1,13 +1,15 @@
 'use client'
 
 import React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Divider } from '@nextui-org/react'
+import axios from 'axios'
 import SwapButton from './components/SwapButton'
 import SwapInput from './components/SwapInput'
 import InversionButton from './components/InversionButton'
 import useOfferCreate from '@/hooks/useCreateOffer'
 import { coins } from '@/config/coin'
+import { getAssetPrice } from '@/utils/asset'
 
 export default function DocsPage() {
   {
@@ -76,6 +78,32 @@ export default function DocsPage() {
     // let source = 10 * Math.random()
     // setSourceValue(source.toString());
   }
+
+  const fetchPrice = async (
+    sourceCurrency: string,
+    destinationCurrency: string,
+    sourceValue: string
+  ) => {
+    const { data: prices } = await axios.get('/api/cryptocurrency/prices')
+
+    const sourceToUsd = getAssetPrice(sourceCurrency, prices)
+    const destinationToUsd = getAssetPrice(destinationCurrency, prices)
+
+    const usdValueOfSource = Number(sourceValue) * Number(sourceToUsd)
+    const destinationValue = usdValueOfSource / Number(destinationToUsd)
+
+    // 小数点第5位を四捨五入
+    const roundDestinationValue =
+      Math.round(destinationValue * 10000000) / 10000000
+
+    setDestinationValue(roundDestinationValue.toString())
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      await fetchPrice(sourceCurrency, destinationCurrency, sourceValue)
+    })()
+  }, [sourceValue])
 
   return (
     <div>

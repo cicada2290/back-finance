@@ -3,6 +3,7 @@ import { useState } from 'react'
 import crossmark from '@crossmarkio/sdk'
 import { TransactionTypes } from '@/config/xrpl/transactions'
 import { useAccountContext } from '@/context/accountContext'
+import Xrpl from '@/libs/xrpl'
 
 const useOfferCreate = () => {
   const [error, setError] = useState<Error>()
@@ -21,7 +22,10 @@ const useOfferCreate = () => {
     if (!accountData.address) return null
 
     try {
-      const issuer_param = 'rLxCx6CCdbjaSM81PEYf6GQSPNAcbKQQDZ'
+      const xrpl = new Xrpl()
+      const issuer = await xrpl.getIssuerWallet()
+
+      const issuer_param = issuer.address
       let takerGets:
         | string
         | { currency: string; issuer: string; value: string } = ''
@@ -31,7 +35,7 @@ const useOfferCreate = () => {
       // スワップ元
       switch (sourceCurrency) {
         case 'XRP':
-          takerGets = sourceValue
+          takerGets = String(Number(sourceValue) * 1000000)
           break
         default:
           takerGets = {
