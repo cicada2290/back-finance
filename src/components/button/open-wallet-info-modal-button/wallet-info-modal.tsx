@@ -25,6 +25,7 @@ const WalletInfoModal: React.FC<WalletInfoModalProps> = ({
 
   const handleDisconnect = () => {
     setAccountData({
+      isSignedIn: false,
       isConnected: false,
       walletName: null,
       address: null,
