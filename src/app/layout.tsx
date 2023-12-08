@@ -1,7 +1,7 @@
 import '@/styles/globals.css'
+import clsx from 'clsx'
 import { fontSans } from '@/config/fonts'
 import Navbar from '@/components/layouts/Navbar'
-import clsx from 'clsx'
 
 import { AccountContextProvider } from '@/context/accountContext'
 import { Providers } from './providers'

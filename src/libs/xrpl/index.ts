@@ -7,11 +7,14 @@ import type {
   AccountLinesResponse,
   AMMInfoRequest,
   AMMInfoResponse,
+  LedgerEntryRequest,
+  LedgerEntryResponse,
   // submit
   AccountSet,
   AMMCreate,
   AMMDelete,
   AMMWithdraw,
+  DIDSet,
   Payment,
   TrustSet,
   TxResponse,
@@ -21,19 +24,56 @@ import { TransactionTypes } from '@/config/xrpl/transactions'
 import { Networks } from '@/config/networks'
 
 interface SubmitAndWaitProps {
-  request: AccountSet | AMMCreate | AMMDelete | AMMWithdraw | Payment | TrustSet
+  request:
+    | AccountSet
+    | AMMCreate
+    | AMMDelete
+    | AMMWithdraw
+    | DIDSet
+    | Payment
+    | TrustSet
   wallet?: Wallet
+}
+
+interface PaymentFromIssuerRequest {
+  to: string
+  currency: string
+  amount: string
+}
+
+interface TrustSetForOperatorRequest {
+  currency: string
+}
+
+export interface IXrpl {
+  // submitAndWait methods
+  mintToken(request: Payment): Promise<TxResponse>
+  accountSet(request: AccountSet): Promise<TxResponse>
+  ammCreate(request: AMMCreate): Promise<TxResponse>
+  ammDelete(): Promise<TxResponse>
+  ammWithdraw(): Promise<TxResponse>
+  didSet(request: DIDSet): Promise<TxResponse>
+  paymentFromIssuer(request: PaymentFromIssuerRequest): Promise<TxResponse>
+  paymentFromIssuer(request: PaymentFromIssuerRequest): Promise<TxResponse>
+  trustSetForOperator(request: TrustSetForOperatorRequest): Promise<TxResponse>
+  // request methods
+  ammInfo(request: AMMInfoRequest): Promise<AMMInfoResponse>
+  accountCurrencies(request: AccountCurrenciesRequest): Promise<BaseResponse>
+  accountLines(request: AccountLinesRequest): Promise<BaseResponse>
+  ledgerEntry(request: LedgerEntryRequest): Promise<LedgerEntryResponse>
 }
 
 type RequestProps =
   | AccountCurrenciesRequest
   | AccountLinesRequest
   | AMMInfoRequest
+  | LedgerEntryRequest
 
-export default class Xrpl {
+export default class Xrpl implements IXrpl {
   private client: Client
   private issuerWallet: Wallet
   private operatorWallet: Wallet
+  private userWallet: Wallet
 
   constructor(network: Networks = Networks.default) {
     this.client = new Client(network)
@@ -42,6 +82,9 @@ export default class Xrpl {
     )
     this.operatorWallet = Wallet.fromSeed(
       process.env.NEXT_PUBLIC_OWNER_HOT_WALLET_SEED as string
+    )
+    this.userWallet = Wallet.fromSeed(
+      process.env.NEXT_PUBLIC_USER_WALLET_SEED as string
     )
   }
 
@@ -53,11 +96,15 @@ export default class Xrpl {
     return this.operatorWallet
   }
 
+  getUserWallet(): Wallet {
+    return this.userWallet
+  }
+
   // ============================================================
   // submitAndWait methods
   // ============================================================
 
-  async mintToken(request: Payment): Promise<TxResponse> {
+  async mintToken(request: Payment) {
     const response = await this.submitAndWait({
       request,
       wallet: this.issuerWallet,
@@ -65,7 +112,7 @@ export default class Xrpl {
     return response
   }
 
-  async accountSet(request: AccountSet): Promise<TxResponse> {
+  async accountSet(request: AccountSet) {
     const response = await this.submitAndWait({
       request,
       wallet: this.issuerWallet,
@@ -73,7 +120,7 @@ export default class Xrpl {
     return response
   }
 
-  async ammCreate(request: AMMCreate): Promise<TxResponse> {
+  async ammCreate(request: AMMCreate) {
     const response = await this.submitAndWait({
       request,
       wallet: this.issuerWallet,
@@ -82,7 +129,26 @@ export default class Xrpl {
   }
 
   // TODO: パラメーターを変更する
-  async ammWithdraw(): Promise<TxResponse> {
+  async ammDelete() {
+    const response = await this.submitAndWait({
+      request: {
+        TransactionType: 'AMMDelete',
+        Account: this.operatorWallet.address,
+        Asset: {
+          currency: 'XRP',
+        },
+        Asset2: {
+          currency: 'BTC',
+          issuer: process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string,
+        },
+      } as AMMDelete,
+      wallet: this.operatorWallet,
+    })
+    return response
+  }
+
+  // TODO: パラメーターを変更する
+  async ammWithdraw() {
     const response = await this.submitAndWait({
       request: {
         TransactionType: 'AMMWithdraw',
@@ -102,34 +168,16 @@ export default class Xrpl {
     return response
   }
 
-  // TODO: パラメーターを変更する
-  async ammDelete(): Promise<TxResponse> {
+  async didSet(request: DIDSet) {
     const response = await this.submitAndWait({
-      request: {
-        TransactionType: 'AMMDelete',
-        Account: this.operatorWallet.address,
-        Asset: {
-          currency: 'XRP',
-        },
-        Asset2: {
-          currency: 'BTC',
-          issuer: process.env.NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string,
-        },
-      } as AMMDelete,
-      wallet: this.operatorWallet,
+      request: request,
+      wallet: this.userWallet,
     })
+
     return response
   }
 
-  async paymentFromIssuer({
-    to,
-    currency,
-    amount,
-  }: {
-    to: string
-    currency: string
-    amount: string
-  }): Promise<TxResponse> {
+  async paymentFromIssuer({ to, currency, amount }: PaymentFromIssuerRequest) {
     const request: Payment = {
       TransactionType: TransactionTypes.Payment,
       Account: this.issuerWallet.address,
@@ -150,11 +198,7 @@ export default class Xrpl {
     return response
   }
 
-  async trustSetForOperator({
-    currency,
-  }: {
-    currency: string
-  }): Promise<TxResponse> {
+  async trustSetForOperator({ currency }: TrustSetForOperatorRequest) {
     const response = await this.submitAndWait({
       request: {
         TransactionType: TransactionTypes.TrustSet,
@@ -174,23 +218,24 @@ export default class Xrpl {
   // Request methods
   // ============================================================
 
-  async ammInfo(request: AMMInfoRequest): Promise<AMMInfoResponse> {
+  async ammInfo(request: AMMInfoRequest) {
     const response = await this.request(request)
     return response as AMMInfoResponse
   }
 
-  async accountCurrencies(
-    request: AccountCurrenciesRequest
-  ): Promise<AccountCurrenciesResponse> {
+  async accountCurrencies(request: AccountCurrenciesRequest) {
     const response = await this.request(request)
     return response as AccountCurrenciesResponse
   }
 
-  async accountLines(
-    request: AccountLinesRequest
-  ): Promise<AccountLinesResponse> {
+  async accountLines(request: AccountLinesRequest) {
     const response = await this.request(request)
     return response as AccountLinesResponse
+  }
+
+  async ledgerEntry(request: LedgerEntryRequest) {
+    const response = await this.request(request)
+    return response as LedgerEntryResponse
   }
 
   // ============================================================

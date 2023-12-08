@@ -13,7 +13,7 @@ const FaucetTableTrustSetButton: React.FC<FaucetTableTrustSetButtonProps> = ({
   issuer,
   refresh,
 }) => {
-  const { submit, isLoading } = useTrustSet()
+  const { submit } = useTrustSet()
 
   const { accountData } = useAccountContext()
 
@@ -29,13 +29,12 @@ const FaucetTableTrustSetButton: React.FC<FaucetTableTrustSetButtonProps> = ({
       },
     })
 
-    await refresh()
+    refresh()
   }
 
   return (
     <Button
       size="sm"
-      isLoading={isLoading}
       isDisabled={!accountData.isConnected}
       onPress={() => handleTrustSet(currency, issuer)}
     >

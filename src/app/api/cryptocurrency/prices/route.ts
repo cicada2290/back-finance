@@ -3,52 +3,56 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   return NextResponse.json([
     {
+      currency: 'XRP',
+      price: '0.6679',
+    },
+    {
+      currency: 'VNI',
+      price: '1.00',
+    },
+    {
       currency: 'BTC',
-      price: '38311.64',
+      price: '43714.12',
     },
     {
       currency: 'ETH',
-      price: '2069.65',
+      price: '2348.97',
     },
     {
       currency: 'BNB',
-      price: '231.11',
-    },
-    {
-      currency: 'XRP',
-      price: '0.61',
+      price: '235.22',
     },
     {
       currency: 'SOL',
-      price: '59.62',
+      price: '73.31',
     },
     {
       currency: 'TRX',
-      price: '0.103',
+      price: '0.106',
     },
     {
       currency: 'LTC',
-      price: '69.38',
+      price: '77.21',
     },
     {
       currency: 'UNI',
-      price: '5.88',
+      price: '6.42',
     },
     {
       currency: 'APT',
-      price: '6.96',
+      price: '8.42',
     },
     {
       currency: 'DOT',
-      price: '5.48',
+      price: '6.67',
     },
     {
       currency: 'ARB',
-      price: '1.2',
+      price: '1.16',
     },
     {
       currency: 'SUI',
-      price: '0.63',
+      price: '0.7045',
     },
   ])
 }

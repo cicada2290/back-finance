@@ -12,6 +12,12 @@ export const xrp: Asset = {
   icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/52.png',
 }
 
+export const vni: Asset = {
+  currency: 'VNI',
+  issuer: issuer,
+  icon: '/vanilla_swap_logo.png',
+}
+
 export const btc: Asset = {
   currency: 'BTC',
   issuer: issuer,
@@ -80,6 +86,7 @@ export const sui: Asset = {
 
 export const coins = [
   xrp,
+  vni,
   btc,
   eth,
   bnb,

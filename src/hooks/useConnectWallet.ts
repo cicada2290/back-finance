@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Wallets } from '@/config/wallets'
 import { useAccountContext } from '@/context/accountContext'
 import Crossmark from '@/utils/wallet/crossmark'
+import useAuth from './useAuth'
 
 const useConnectWallet = () => {
   const [account, setAccount] = useState<string>('')
@@ -10,6 +11,7 @@ const useConnectWallet = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { setAccountData } = useAccountContext()
+  const { signin } = useAuth()
 
   const initState = () => {
     setAccount('')
@@ -32,9 +34,12 @@ const useConnectWallet = () => {
 
       if (response.meta.isRejected) return
 
+      const isVerifiedDid = await signin()
+
       // set account
       setAccountData({
         isConnected: true,
+        isSignedIn: isVerifiedDid,
         walletName: Wallets.Crossmark,
         address: response.address,
         balance: 0,
@@ -62,6 +67,7 @@ const useConnectWallet = () => {
   const disconnect = () => {
     setAccountData({
       isConnected: false,
+      isSignedIn: false,
       walletName: '',
       address: '',
       balance: 0,

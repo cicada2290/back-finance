@@ -30,8 +30,7 @@ const AmmDepositButton: React.FC<AmmDepositButtonProps> = ({
       asset1: amount1,
       asset2: amount2,
     })
-
-    refresh()
+    await refresh()
   }
 
   return (
