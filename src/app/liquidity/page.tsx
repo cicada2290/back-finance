@@ -1,19 +1,31 @@
 'use client'
 
+import { Button, Spinner } from '@nextui-org/react'
+import AmmCardList from '@/app/liquidity/components/AmmCardList'
 import useAmmInfo from '@/hooks/useAmmInfo'
-import AmmInfoTable from '@/app/liquidity/components/AmmInfoTable'
+import { useAccountContext } from '@/context/accountContext'
 
 export default function LiquidityPage() {
-  const { data, loadingState, fetchData } = useAmmInfo()
+  const { accountData } = useAccountContext()
+  const { data, fetchData, isLoading } = useAmmInfo()
 
   return (
     <div>
       <div className="pb-10">
-        <AmmInfoTable
-          items={data}
-          loadingState={loadingState}
-          refresh={fetchData}
-        />
+        {accountData.isConnected ? (
+          isLoading ? (
+            <Spinner color="secondary" />
+          ) : (
+            <>
+              <Button className="mb-3" onPress={fetchData}>
+                Refresh
+              </Button>
+              <AmmCardList items={data} refresh={fetchData} />
+            </>
+          )
+        ) : (
+          <h1>Connect to a wallet to use the faucet</h1>
+        )}
       </div>
     </div>
   )

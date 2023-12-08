@@ -24,7 +24,7 @@ const FaucetTableMintButton: React.FC<FaucetTableMintButtonProps> = ({
       currency,
       issuer,
       account: accountData.address,
-      value: '10000',
+      value: '10',
     })
 
     refresh()

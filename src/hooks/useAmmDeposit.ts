@@ -29,9 +29,10 @@ const useAmmDeposit = () => {
     asset1: Amount
     asset2: Amount
   }) => {
-    asset1.value = '10000000'
-    setIsLoading(true)
     try {
+      asset1.value = '50000000'
+      setIsLoading(true)
+
       const isXRP = asset1.currency === 'XRP'
       const { data: prices } = await axios.get('/api/cryptocurrency/prices')
 
@@ -88,8 +89,6 @@ const useAmmDeposit = () => {
 
       const response = await crossmark.signAndSubmit(request)
       console.info('[AMMDeposit]: ', response)
-
-      return response
     } catch (error: unknown) {
       console.error('Error fetching data:', error)
       if (error instanceof Error) {

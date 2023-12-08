@@ -1,17 +1,16 @@
+import type { Amount } from 'xrpl'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Commands } from '@/config/xrpl/commands'
-import { getAssetName, getAssetIcon, getAssetPrice } from '@/utils/asset'
-import { requests } from '@/config/xrpl/request/ammInfo'
+import { getAssetIcon, getAssetPrice } from '@/utils/asset'
+import { requests as ammInfoRequests } from '@/config/xrpl/request/ammInfo'
 import { useAccountContext } from '@/context/accountContext'
 import Xrpl from '@/libs/xrpl'
-
-const issuerAddress = process.env
-  .NEXT_PUBLIC_OWNER_COLD_WALLET_ADDRESS as string
 
 export interface Data {
   id: number
   name: string
+  isCreated: boolean
   asset1: {
     currency: string
     issuer?: string
@@ -26,12 +25,12 @@ export interface Data {
   }
   lp: {
     account: string
-    price: number
+    volumeUsd: number
   }
   my: {
-    amount1: string
-    amount2: string
-    price: string
+    amount1: number
+    amount2: number
+    volumeUsd: number
   }
 }
 
@@ -66,6 +65,7 @@ const useAmmInfo = () => {
     let lines: {
       account: string
       balance: string
+      currency: string
     }[] = []
     if (accountData.address) {
       const accountLines = await client.accountLines({
@@ -75,104 +75,133 @@ const useAmmInfo = () => {
       lines = accountLines.result.lines.map((line) => ({
         account: line.account,
         balance: line.balance,
+        currency: line.currency,
       }))
       console.info('[AccountLine] ', lines)
     }
     return lines
   }
 
+  /**
+   * getAssetValue
+   */
+  const getAssetValue = (asset: Amount | string | undefined): number => {
+    if (!asset) {
+      return Number(0)
+    } else if (typeof asset === 'string') {
+      return Number(asset) / Number(1000000)
+    } else {
+      return Number(asset.value)
+    }
+  }
+
+  const getMyLpBalance = (
+    lpAccount: string,
+    line: { account: string; balance: string; currency: string }[]
+  ): number => {
+    const balance = line.find((line) => line.account === lpAccount)?.balance
+    return balance ? Number(balance) : 0
+  }
+
   const fetchData = async () => {
+    if (!accountData.address) return
     const result: Data[] = []
     try {
       setIsLoading(true)
       setLoadingState('loading')
+
       const client = new Xrpl()
       const prices = await fetchPrices()
       const lines = await fetchAccountLines(client)
 
       let counter = 1
-      for (const request of requests) {
+      for (const request of ammInfoRequests) {
+        // Name
+        const baseAssetName = request.asset?.currency as string
+        const quoteAssetName = request.asset2?.currency as string
+
         // Fetch AMMInfo
-        const response = await client.ammInfo(request).catch(() => undefined)
-        if (!response) {
-          continue
-        }
+        const response = await client
+          .ammInfo(request)
+          .then((res) => {
+            return res.result.amm
+          })
+          .catch(() => undefined)
 
         console.info(
           '[AMMInfo]: ',
           request.asset?.currency,
           request.asset2?.currency,
-          response.result.amm
+          response
         )
 
-        // My data
-        const myLp: { account: string; balance: string } | undefined =
-          lines.find((line) => line.account === response.result.amm.account)
+        // Value
+        const baseAssetValue = getAssetValue(response?.amount)
+        const quoteAssetValue = getAssetValue(response?.amount2)
 
-        let lpRate = 0
-        if (myLp) {
-          lpRate =
-            Number(myLp.balance) / Number(response.result.amm.lp_token.value)
-        }
-
-        // AMMInfo
-        const ammInfo = response.result.amm
-
-        // Mapping
-        const baseAssetName = getAssetName(ammInfo.amount)
-        const baseAssetValue =
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          baseAssetName === 'XRP'
-            ? Number(ammInfo.amount) / Number(1000000)
-            : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              ammInfo.amount.value
+        // Price
         const baseAsestPrice = getAssetPrice(baseAssetName, prices)
-        const quoteAssetName = getAssetName(ammInfo.amount2)
-        const quoteAssetValue =
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          quoteAssetName === 'XRP' ? ammInfo.amount2 : ammInfo.amount2.value
         const quoteAssetPrice = getAssetPrice(quoteAssetName, prices)
-        const lpPrice =
+
+        // LP volume
+        const lpVolume =
           Number(baseAssetValue) * Number(baseAsestPrice) +
           Number(quoteAssetValue) * Number(quoteAssetPrice)
 
-        const mappingData: Data = {
+        // My LP
+        let myLpBalance = 0
+        if (response) {
+          myLpBalance = getMyLpBalance(response.account, lines)
+        }
+
+        // LP rate
+        let lpRate = 0
+        if (response) {
+          lpRate = Number(myLpBalance) / Number(response.lp_token.value)
+        }
+
+        // LP amount
+        const myLpBaseAmount =
+          Math.round(baseAssetValue * lpRate * 10000) / 10000
+        const myLpQuoteAmount =
+          Math.round(quoteAssetValue * lpRate * 10000) / 10000
+        const myVolumeUsd =
+          Math.round(
+            (myLpBaseAmount * Number(baseAsestPrice) +
+              myLpQuoteAmount * Number(quoteAssetPrice)) *
+              10000
+          ) / 10000
+
+        // Set AMMInfoData
+        const ammInfoData: Data = {
           id: counter++,
           name: `${baseAssetName}-${quoteAssetName}`,
+          isCreated: response !== undefined ? true : false,
           asset1: {
             currency: baseAssetName,
-            issuer: baseAssetName === 'XRP' ? undefined : issuerAddress,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            value: Number(baseAssetValue).toFixed(6),
+            issuer: request.asset?.issuer as string,
+            value: baseAssetValue,
             icon: getAssetIcon(baseAssetName),
           },
           asset2: {
             currency: quoteAssetName,
-            issuer: quoteAssetName === 'XRP' ? undefined : issuerAddress,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            value: Number(quoteAssetValue).toFixed(6),
+            issuer: request.asset2?.issuer as string,
+            value: quoteAssetValue,
             icon: getAssetIcon(quoteAssetName),
           },
           lp: {
-            account: ammInfo.account,
-            price: lpPrice,
+            account: response?.account as string,
+            volumeUsd: lpVolume,
           },
           my: {
-            amount1: (baseAssetValue * lpRate).toFixed(6),
-            amount2: (quoteAssetValue * lpRate).toFixed(6),
-            price: Number(
-              baseAssetValue * lpRate * Number(baseAsestPrice) +
-                quoteAssetValue * lpRate * Number(quoteAssetPrice)
-            ).toFixed(2),
+            amount1: myLpBaseAmount,
+            amount2: myLpQuoteAmount,
+            volumeUsd: myLpBalance !== 0 ? myVolumeUsd : 0,
           },
         }
 
-        result.push(mappingData)
+        console.log('[AmmInfo]: ', ammInfoData)
+        result.push(ammInfoData)
       }
 
       console.info('[AMMInfo]: result: ', result)
@@ -195,12 +224,14 @@ const useAmmInfo = () => {
     ;(async () => {
       await fetchData()
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     ;(async () => {
       await fetchData()
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountData.address])
 
   return {

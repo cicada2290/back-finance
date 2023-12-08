@@ -28,6 +28,7 @@ export const AccountContextProvider = ({
 }) => {
   const [accountData, setAccountData] = useState<AccountData>({
     isConnected: false,
+    isSignedIn: false,
     walletName: null,
     address: null,
     balance: 0,

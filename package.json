@@ -34,7 +34,7 @@
     "clsx": "^2.0.0",
     "eslint": "8.48.0",
     "eslint-config-next": "14.0.2",
-    "framer-motion": "^10.16.5",
+    "framer-motion": "^10.16.12",
     "intl-messageformat": "^10.5.8",
     "next": "^14.0.3",
     "next-themes": "^0.2.1",
@@ -44,13 +44,13 @@
     "tailwind-variants": "^0.1.18",
     "tailwindcss": "3.3.5",
     "typescript": "5.0.4",
-    "xrpl": "^2.13.0",
-    "xumm": "^1.6.5"
+    "xrpl": "^2.14.0",
+    "xumm": "^1.6.6"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "prettier": "3.1.0"

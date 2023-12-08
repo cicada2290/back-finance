@@ -10,6 +10,16 @@ export const requests: AMMInfoRequest[] = [
       currency: 'XRP',
     },
     asset2: {
+      currency: 'VNI',
+      issuer,
+    },
+  },
+  {
+    command,
+    asset: {
+      currency: 'XRP',
+    },
+    asset2: {
       currency: 'BTC',
       issuer,
     },
@@ -54,6 +64,7 @@ export const requests: AMMInfoRequest[] = [
       issuer,
     },
   },
+  /*
   {
     command,
     asset: {
@@ -87,23 +98,32 @@ export const requests: AMMInfoRequest[] = [
   {
     command,
     asset: {
-      currency: 'BTC',
-      issuer,
+      currency: 'XRP',
     },
     asset2: {
-      currency: 'ETH',
+      currency: 'DOT',
       issuer,
     },
   },
   {
     command,
     asset: {
-      currency: 'ETH',
-      issuer,
+      currency: 'XRP',
     },
     asset2: {
-      currency: 'BNB',
+      currency: 'ARB',
       issuer,
     },
   },
+  {
+    command,
+    asset: {
+      currency: 'XRP',
+    },
+    asset2: {
+      currency: 'SUI',
+      issuer,
+    },
+  },
+  */
 ]

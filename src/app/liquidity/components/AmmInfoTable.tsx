@@ -1,9 +1,7 @@
 'use client'
 
 import type { Data } from '@/hooks/useAmmInfo'
-import { useMemo } from 'react'
 import {
-  Button,
   Image,
   Spinner,
   Table,
@@ -13,10 +11,9 @@ import {
   TableRow,
   TableCell,
 } from '@nextui-org/react'
+import AmmCreatePoolButton from '@/app/liquidity/components/AmmCreatePoolButton'
 import AmmDepositButton from '@/app/liquidity/components/AmmDepositButton'
 import AmmWithdrawButton from '@/app/liquidity/components/AmmWithdrawButton'
-import PoolCreateButton from '@/app/liquidity/components/PoolCreateButton'
-import PoolDeleteButton from '@/app/liquidity/components/PoolDeleteButton'
 
 type LoadingState =
   | 'loading'
@@ -35,17 +32,8 @@ const AmmInfoTable = ({
   loadingState?: LoadingState
   refresh: () => void
 }) => {
-  const topContent = useMemo(() => {
-    return (
-      <div className="flex justify-center gap-2">
-        <PoolCreateButton refresh={refresh} />
-        <PoolDeleteButton />
-      </div>
-    )
-  }, [])
-
   return (
-    <Table isStriped topContent={topContent}>
+    <Table isStriped>
       <TableHeader>
         <TableColumn>Name</TableColumn>
         <TableColumn>TLV</TableColumn>
@@ -81,7 +69,7 @@ const AmmInfoTable = ({
               </div>
             </TableCell>
             <TableCell>
-              <p>${item.lp.price.toLocaleString()}</p>
+              <p>${item.lp.volumeUsd.toLocaleString()}</p>
               <p className="text-bold text-sm capitalize text-default-400">
                 {item.asset1.value} {item.asset1.currency}
               </p>
@@ -90,7 +78,7 @@ const AmmInfoTable = ({
               </p>
             </TableCell>
             <TableCell>
-              <p>${item.my.price}</p>
+              <p>${item.my.volumeUsd}</p>
               <p className="text-bold text-sm capitalize text-default-400">
                 {item.my.amount1} {item.asset1.currency}
               </p>
@@ -99,7 +87,16 @@ const AmmInfoTable = ({
               </p>
             </TableCell>
             <TableCell className="grid grid-cols-1 gap-2">
-              <Button size="sm">Detail</Button>
+              <AmmCreatePoolButton
+                asset1={{
+                  currency: item.asset1.currency,
+                }}
+                asset2={{
+                  currency: item.asset2.currency,
+                }}
+                isDisabled={item.isCreated}
+                refresh={refresh}
+              />
               <AmmDepositButton
                 amount1={{
                   currency: item.asset1.currency,

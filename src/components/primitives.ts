@@ -20,6 +20,10 @@ export const title = tv({
     fullWidth: {
       true: 'w-full block',
     },
+    weight: {
+      normal: 'font-normal',
+      bold: 'font-bold',
+    },
   },
   defaultVariants: {
     size: 'md',

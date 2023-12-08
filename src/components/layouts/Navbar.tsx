@@ -1,5 +1,7 @@
 'use client'
 
+import NextLink from 'next/link'
+import clsx from 'clsx'
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -10,19 +12,12 @@ import {
   NavbarMenuItem,
 } from '@nextui-org/navbar'
 import { Link } from '@nextui-org/link'
-
 import { link as linkStyles } from '@nextui-org/theme'
-
 import { siteConfig } from '@/config/site'
-import NextLink from 'next/link'
-import clsx from 'clsx'
-
-import { ThemeSwitch } from '@/components/theme-switch'
-
+import { useAccountContext } from '@/context/accountContext'
+import { ThemeSwitchButton } from '@/components/elements/button/ThemeSwitchButton'
 import OpenWalletInfoModalButton from '@/components/button/open-wallet-info-modal-button'
 import SelectWalletModalButton from '@/components/features/navbar/SelectWalletModalButton'
-
-import { useAccountContext } from '@/context/accountContext'
 
 const Navbar = () => {
   const { accountData } = useAccountContext()
@@ -58,7 +53,7 @@ const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <ThemeSwitch />
+          <ThemeSwitchButton />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
           {!accountData.isConnected && <SelectWalletModalButton />}
@@ -67,7 +62,7 @@ const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <ThemeSwitch />
+        <ThemeSwitchButton />
         <NavbarMenuToggle />
       </NavbarContent>
 
