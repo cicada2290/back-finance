@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@nextui-org/react'
-import { UpDownIcon } from '@/components/icons'
+import { UpDownIcon } from '@/components/elements/Icons'
 
 interface InversionButtonProps {
   onClick: () => void
