@@ -12,8 +12,7 @@ const SwapButton: React.FC<SwapButtonProps> = ({ onClick, isLoding }) => {
     <>
       <Button
         fullWidth
-        variant="flat"
-        color="success"
+        className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
         onClick={onClick}
         isLoading={isLoding}
       >

@@ -108,7 +108,7 @@ export default function DocsPage() {
   return (
     <div>
       {/* メインコンテンツ */}
-      <div className="flex flex-col rounded-lg border-1 border-indigo-500">
+      <div className="flex flex-col rounded-lg border-1 border-gray-500">
         {/* スワップタイトル */}
         <div className="flex gap-2 justify-between m-4">
           <div className="flex flex-row">
