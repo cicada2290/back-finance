@@ -83,3 +83,12 @@ src/
  ├ styles/
  └ types/
 ```
+
+## Tips
+
+### Prisma
+
+```bash
+# Run a migration to create your database tables with Prisma Migrate
+npx prisma migrate dev --name init
+```

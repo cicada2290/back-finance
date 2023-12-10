@@ -14,12 +14,12 @@ export default function Home() {
           Everyone&#039;s&nbsp;
         </h1>
         <br />
-        <h1 className={title({ size: 'lg', weight: 'bold', color: 'violet' })}>
+        <h1 className={title({ size: 'lg', weight: 'bold', color: 'yellow' })}>
           Favorite&nbsp;
         </h1>
         <h1 className={title({ size: 'lg', weight: 'bold' })}>DEX</h1>
         <br />
-        <h2 className={subtitle({ class: 'mt-4' })}>
+        <h2 className={subtitle({ class: 'mt-4', color: 'foreground' })}>
           Trade, earn, and own crypto on the all-in-one DEX
         </h2>
       </div>
