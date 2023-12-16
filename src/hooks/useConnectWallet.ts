@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Wallets } from '@/config/wallets'
 import { useAccountContext } from '@/context/accountContext'
 import Crossmark from '@/utils/wallet/crossmark'
-import useAuth from './useAuth'
+// import useAuth from './useAuth'
 
 const useConnectWallet = () => {
   const [account, setAccount] = useState<string>('')
@@ -11,7 +11,7 @@ const useConnectWallet = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { setAccountData } = useAccountContext()
-  const { signin } = useAuth()
+  // const { signin } = useAuth()
 
   const initState = () => {
     setAccount('')
