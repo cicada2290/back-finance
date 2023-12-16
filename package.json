@@ -47,6 +47,7 @@
     "siwe": "^2.1.4",
     "tailwind-variants": "^0.1.18",
     "tailwindcss": "3.3.5",
+    "wagmi": "^1.4.12",
     "xrpl": "^2.14.0",
     "xumm": "^1.7.1"
   },
