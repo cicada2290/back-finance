@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, useDisclosure } from '@nextui-org/react'
 import SelectWalletModal from '@/components/features/navbar/SelectWalletModal'
 

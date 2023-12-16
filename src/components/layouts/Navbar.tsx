@@ -46,17 +46,17 @@ const Navbar = () => {
             </NavbarItem>
           ))}
           <NavbarItem>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: 'foreground' }),
-                  'data-[active=true]:text-primary data-[active=true]:font-medium'
-                )}
-                color="foreground"
-                href="https://ruckplus-tech.gitbook.io/vanillaswap/"
-              >
-                Wiki
-              </NextLink>
-            </NavbarItem>
+            <NextLink
+              className={clsx(
+                linkStyles({ color: 'foreground' }),
+                'data-[active=true]:text-primary data-[active=true]:font-medium'
+              )}
+              color="foreground"
+              href="https://ruckplus-tech.gitbook.io/vanillaswap/"
+            >
+              Wiki
+            </NextLink>
+          </NavbarItem>
         </ul>
       </NavbarContent>
 

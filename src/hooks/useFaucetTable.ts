@@ -33,6 +33,7 @@ const useFaucetTable = () => {
       const client = new Xrpl()
 
       const issuerWallet = client.getIssuerWallet()
+      console.log('[issuerWallet]', issuerWallet)
 
       // Fetch account currencies
       const accountCurrencies = await client.accountCurrencies({

@@ -34,12 +34,10 @@ const useConnectWallet = () => {
 
       if (response.meta.isRejected) return
 
-      const isVerifiedDid = await signin()
-
       // set account
       setAccountData({
         isConnected: true,
-        isSignedIn: isVerifiedDid,
+        isSignedIn: true,
         walletName: Wallets.Crossmark,
         address: response.address,
         balance: 0,

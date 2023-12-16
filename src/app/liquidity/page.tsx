@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { Button, Spinner } from '@nextui-org/react'
 import AmmCardList from '@/app/liquidity/components/AmmCardList'
 import useAmmInfo from '@/hooks/useAmmInfo'
@@ -8,6 +9,10 @@ import { useAccountContext } from '@/context/accountContext'
 export default function LiquidityPage() {
   const { accountData } = useAccountContext()
   const { data, fetchData, isLoading } = useAmmInfo()
+
+  useEffect(() => {
+    console.log('accountData', accountData)
+  }, [accountData])
 
   return (
     <div>

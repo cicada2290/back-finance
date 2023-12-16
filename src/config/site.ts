@@ -22,10 +22,6 @@ export const siteConfig = {
       label: 'Faucet',
       href: '/faucet',
     },
-    {
-      label: 'MyPage',
-      href: '/mypage',
-    },
   ],
   navMenuItems: [
     {
