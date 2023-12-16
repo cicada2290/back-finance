@@ -1,3 +1,4 @@
+/*
 'use client'
 
 // React
@@ -7,6 +8,7 @@ import { Button } from '@nextui-org/react'
 // Siwe
 import { SiweMessage } from 'siwe'
 // wagmi
+/*
 import {
   useAccount,
   useConnect,
@@ -14,6 +16,7 @@ import {
   useSignMessage,
   useDisconnect,
 } from 'wagmi'
+
 import { InjectedConnector } from 'wagmi/connectors/injected'
 // NextAuth
 import { getCsrfToken } from 'next-auth/react'
@@ -52,7 +55,6 @@ export default function MyPage() {
       console.info('signature: ', signature)
 
       // Create a callback url
-      /*
       const callbackUrl = '/'
       signIn('credentials', {
         message: JSON.stringify(message),
@@ -60,7 +62,6 @@ export default function MyPage() {
         signature,
         callbackUrl,
       })
-      */
     } catch (error: unknown) {
       console.error(error)
     }
@@ -89,3 +90,4 @@ export default function MyPage() {
     </div>
   )
 }
+*/
